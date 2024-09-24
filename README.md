@@ -35,10 +35,10 @@ To get started with this application:
     ./vendor/bin/sail up
     ```
 
-6. Run migrations:
+6. Run migrations and seeders:
 
     ```bash
-    ./vendor/bin/sail artisan migrate
+    ./vendor/bin/sail artisan migrate --seed
     ```
 
 
