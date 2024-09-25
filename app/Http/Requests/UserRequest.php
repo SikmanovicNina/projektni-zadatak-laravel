@@ -22,6 +22,8 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->route('user') ? $this->route('user')->id : null;
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -29,13 +31,13 @@ class UserRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->ignore($this->user),
+                Rule::unique('users', 'email')->ignore($userId),
             ],
             'username' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('users', 'username')->ignore($this->user),
+                Rule::unique('users', 'username')->ignore($userId),
             ],
             'profile_picture' => [
                 'nullable',
@@ -45,7 +47,7 @@ class UserRequest extends FormRequest
             'jmbg' => [
                 'required',
                 'digits:13',
-                Rule::unique('users', 'jmbg')->ignore($this->user),
+                Rule::unique('users', 'jmbg')->ignore($userId),
             ],
             'role_id' => ['required', Rule::exists('roles', 'id')],
             'password' => ['nullable'],
