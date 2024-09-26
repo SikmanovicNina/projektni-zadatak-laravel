@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class UserController extends Controller
 {
+    use AuthorizesRequests;
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        $this->authorizeResource(User::class, 'user');
+    }
+
     public function index()
     {
         $perPage = request('perPage', 20);
@@ -28,6 +37,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user = $user->load('role');
+
         return response()->json($user, 200);
     }
 
