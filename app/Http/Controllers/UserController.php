@@ -7,20 +7,17 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $perPage = request('perPage', 20);
+
+        $users = User::latest()->filter(request(['search', 'role_id']))->paginate($perPage);
+
+        return response()->json($users);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(UserRequest $request)
     {
-
         $validatedData = $request->validated();
 
         $user = User::create($validatedData);
@@ -31,9 +28,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        $user = $user->load('role');
+        return response()->json($user, 200);
     }
 
     /**
@@ -56,6 +54,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return response()->json( 204);
+        return response()->json(204);
     }
 }
