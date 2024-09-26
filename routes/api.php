@@ -6,4 +6,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('users', UserController::class);
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::resource('auth', AuthController::class);
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
