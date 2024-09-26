@@ -40,4 +40,9 @@ class UserPolicy
     {
         return false;
     }
+
+    public function uploadPicture(User $user)
+    {
+        return false;
+    }
 }
