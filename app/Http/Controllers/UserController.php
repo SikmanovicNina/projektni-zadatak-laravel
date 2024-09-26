@@ -25,18 +25,12 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user)
     {
         $user = $user->load('role');
         return response()->json($user, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UserRequest $request, User $user)
     {
         $validatedData = $request->validated();
@@ -47,13 +41,28 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
         $user->delete();
 
         return response()->json(204);
+    }
+
+    public function uploadPicture(Request $request, User $user)
+    {
+        $request->validate([
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+        ]);
+
+        $path = $request->file('picture')->store('user-pictures', 'public');
+
+        $user->profile_picture = $path;
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Picture uploaded successfully',
+            'picture_path' => $path,
+        ], 200);
     }
 }
