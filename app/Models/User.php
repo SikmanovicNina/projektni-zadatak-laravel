@@ -13,6 +13,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const ROLE_LIBRARIAN = 2;
+
     protected $fillable = [
         'name',
         'username',
