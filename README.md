@@ -14,7 +14,7 @@ To get started with this application:
 1. Install dependencies:
 
     ```bash
-   ./vendor/bin/sail composer install
+   composer install
     ```
 
 3. Copy the `.env.example` file to `.env`:
