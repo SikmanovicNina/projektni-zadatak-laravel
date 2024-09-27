@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
 class AddFirstLibrarian extends Command
@@ -53,7 +56,11 @@ class AddFirstLibrarian extends Command
 
         $librarian->save();
 
-        $this->info('First librarian added successfully!');
+        $token = Password::createToken($librarian);
+
+        Mail::to($librarian->email)->send(new ResetPasswordMail($token));
+
+        $this->info('First librarian added successfully! A password reset email has been sent to their email address.');
 
         return 0;
     }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
@@ -31,6 +34,10 @@ class UserController extends Controller
         $validatedData = $request->validated();
 
         $user = User::create($validatedData);
+
+        $token = Password::createToken($user);
+
+        Mail::to($user->email)->send(new ResetPasswordMail($token));
 
         return response()->json($user, 201);
     }
