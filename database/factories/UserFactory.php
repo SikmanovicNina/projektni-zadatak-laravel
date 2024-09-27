@@ -26,7 +26,8 @@ class UserFactory extends Factory
     {
 
         return [
-            'name' => $this->faker->name(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'username' => $this->faker->unique()->username(),
             'email' => $this->faker->unique()->safeEmail(),
             'jmbg' => $this->faker->unique()->regexify('[0-9]{13}'),
