@@ -16,7 +16,8 @@ class User extends Authenticatable
     const ROLE_LIBRARIAN = 2;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'username',
         'jmbg',
         'role_id',
