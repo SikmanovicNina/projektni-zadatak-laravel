@@ -2,14 +2,14 @@
 
 namespace App\Listeners;
 
-use App\Events\LibrarianCreated;
+use App\Events\PasswordResetRequested;
 use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 
 class SendLibrarianPasswordResetEmail
 {
-    public function handle(LibrarianCreated $event)
+    public function handle(PasswordResetRequested $event)
     {
         $token = Password::createToken($event->librarian);
 

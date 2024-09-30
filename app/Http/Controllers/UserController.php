@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\LibrarianCreated;
+use App\Events\PasswordResetRequested;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -34,7 +34,7 @@ class UserController extends Controller
         $user = User::create($validatedData);
 
         if ($validatedData['role_id'] === User::ROLE_LIBRARIAN) {
-            event(new LibrarianCreated($user));
+            event(new PasswordResetRequested($user));
         }
 
         return response()->json($user, 201);
