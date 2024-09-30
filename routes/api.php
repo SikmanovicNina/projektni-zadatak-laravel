@@ -14,3 +14,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail']);
+
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
+
+
