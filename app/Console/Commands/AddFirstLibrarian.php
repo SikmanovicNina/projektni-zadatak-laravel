@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Events\LibrarianCreated;
+use App\Events\PasswordResetRequested;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
@@ -54,7 +54,7 @@ class AddFirstLibrarian extends Command
 
         $librarian->save();
 
-        event(new LibrarianCreated($librarian));
+        event(new PasswordResetRequested($librarian));
 
         $this->info('First librarian added successfully! A password reset email has been sent to their email address.');
 
