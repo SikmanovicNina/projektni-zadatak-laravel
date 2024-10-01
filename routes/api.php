@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,3 +12,7 @@ Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPictur
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail']);
+
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
