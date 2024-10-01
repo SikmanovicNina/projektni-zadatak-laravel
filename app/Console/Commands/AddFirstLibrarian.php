@@ -44,7 +44,7 @@ class AddFirstLibrarian extends Command
             return 1;
         }
 
-        $librarian = new User;
+        $librarian = new User();
         $librarian->first_name = $firstName;
         $librarian->last_name = $lastName;
         $librarian->email = $email;
