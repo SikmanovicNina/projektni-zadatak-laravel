@@ -12,17 +12,11 @@ class UserController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct()
+    public function index(Request $request)
     {
-        $this->middleware('auth:sanctum');
-        $this->authorizeResource(User::class, 'user');
-    }
+        $perPage = $request->input('per_page', 20);
 
-    public function index()
-    {
-        $perPage = request('perPage', 20);
-
-        $users = User::latest()->filter(request(['search', 'role_id']))->paginate($perPage);
+        $users = User::latest()->filter($request->only(['search', 'role_id']))->paginate($perPage);
 
         return response()->json($users);
     }

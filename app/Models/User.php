@@ -48,10 +48,14 @@ class User extends Authenticatable
     {
         Log::info('filters', $filters);
 
-        $query->when($filters['search'] ?? false, fn ($query, $search) => $query->where(fn ($query) => $query->where('name', 'like', '%'.$search.'%')
-            ->orWhere('username', 'like', '%'.$search.'%')));
+        $query->when($filters['search'] ?? false, fn ($query, $search) =>
+        $query->where(fn ($query) =>
+        $query->where('first_name', 'like', '%'.$search.'%')
+              ->orWhere('last_name', 'like', '%'.$search.'%')
+              ->orWhere('username', 'like', '%'.$search.'%')));
 
-        $query->when($filters['role_id'] ?? false, fn ($query, $roleId) => $query->where('role_id', $roleId));
+        $query->when($filters['role_id'] ?? false, fn ($query, $roleId) =>
+        $query->where('role_id', $roleId));
 
         return $query;
     }
