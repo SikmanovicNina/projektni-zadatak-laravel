@@ -3,16 +3,20 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\LibrarianMiddleware;
 use Illuminate\Support\Facades\Route;
-
-Route::apiResource('users', UserController::class);
-
-Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPicture']);
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail']);
+Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function () {
 
-Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
+    Route::apiResource('users', UserController::class);
+
+    Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPicture']);
+
+    Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail']);
+
+    Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
+});
