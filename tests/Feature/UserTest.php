@@ -20,10 +20,10 @@ it('can login', function () {
     ]);
 
     $response->assertStatus(200);
-
 });
 
 it('cannot login without email', function () {
+
     User::factory()->create([
         'email' => 'librarian@library.com',
         'password' => Hash::make('password'),
