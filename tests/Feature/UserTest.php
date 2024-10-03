@@ -1,45 +1,55 @@
 <?php
 
 use App\Models\User;
-use Laravel\Sanctum\Sanctum;
+use Illuminate\Support\Facades\Hash;
 
 beforeEach(function () {
-    $this->librarian = User::factory()->create(['role_id' => User::ROLE_LIBRARIAN]);
-    Sanctum::actingAs($this->librarian);
+    (new \Database\Seeders\RolesTableSeeder)->run();
 });
 
-it('can paginate users', function () {
+it('can login', function () {
 
-    $response = $this->get('/api/users');
+    User::factory()->create([
+        'email' => 'librarian@library.com',
+        'password' => Hash::make('password'),
+    ]);
+
+    $response = $this->postJson(route('login'), [
+        'email' => 'librarian@library.com',
+        'password' => 'password',
+    ]);
 
     $response->assertStatus(200);
 
 });
 
+it('can paginate users', function () {
+    authenticateLibrarian();
+
+    $response = $this->getJson(route('users.index'));
+    $response->assertStatus(200);
+
+});
+
 it('can store a new user', function () {
+    authenticateLibrarian();
 
-    $data = [
-        'first_name' => 'John',
-        'last_name' => 'Doe',
-        'email' => 'e2@example.com',
-        'username' => 'example123',
-        'jmbg' => '1234557880122',
-        'role_id' => 1,
-        'password' => 'password123',
-    ];
+    $data = User::factory()->raw();
 
-    $response = $this->postJson('/api/users', $data);
+    $response = $this->postJson(route('users.index'), $data);
 
     $response->assertStatus(201);
 
-    $this->assertDatabaseHas('users', [
-        'email' => 'e2@example.com',
-        'username' => 'example123',
-        'jmbg' => '1234557880122',
-    ]);
+    unset($data['password']);
+    unset($data['email_verified_at']);
+    unset($data['remember_token']);
+
+    $this->assertDatabaseHas('users', $data);
 });
 
 it('can update user', function () {
+    authenticateLibrarian();
+
     $user = User::factory()->create([
         'first_name' => 'OldName123',
         'last_name' => 'OldLastName123',
@@ -70,6 +80,7 @@ it('can update user', function () {
 });
 
 it('can retrieve a specific user', function () {
+    authenticateLibrarian();
 
     $user = User::factory()->create([
         'first_name' => 'Name1234',
@@ -93,9 +104,10 @@ it('can retrieve a specific user', function () {
 });
 
 it('can delete user', function () {
+    authenticateLibrarian();
+
     $user = User::factory()->create();
     $response = $this->deleteJson(route('users.destroy', $user->id));
     $response->assertStatus(200);
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
 });
-

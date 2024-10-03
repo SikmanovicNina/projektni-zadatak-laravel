@@ -11,12 +11,11 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function () {
-
     Route::apiResource('users', UserController::class);
-
     Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPicture']);
+});
 
+Route::middleware([LibrarianMiddleware::class])->group(function () {
     Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail']);
-
     Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
 });
