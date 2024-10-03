@@ -15,7 +15,5 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPicture']);
 });
 
-Route::middleware([LibrarianMiddleware::class])->group(function () {
-    Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail']);
-    Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
-});
+Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail'])->name('password.reset-request');
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.reset');
