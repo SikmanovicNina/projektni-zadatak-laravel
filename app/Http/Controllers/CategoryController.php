@@ -19,6 +19,11 @@ class CategoryController extends Controller
 
         $validatedData = $request->validated();
 
+        if ($request->hasFile('icon')) {
+            $path = $request->file('icon')->store('icons', 'public');
+            $validatedData['icon'] = $path;
+        }
+
         $category = Category::create($validatedData);
 
         return new CategoryResource($category);

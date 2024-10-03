@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->sentence(),
-            'icon' => $this->faker->imageUrl(640, 480)
+            'icon' => $this->faker->image(storage_path('app/public/icons'), 400, 400, null, false),
         ];
     }
 }
