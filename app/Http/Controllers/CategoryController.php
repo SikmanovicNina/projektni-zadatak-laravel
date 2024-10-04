@@ -62,8 +62,14 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        if ($category->icon) {
+            Storage::disk('public')->delete($category->icon);
+        }
+
+        $category->delete();
+
+        return response()->json(['message' => 'Category deleted successfully.'], 200);
     }
 }
