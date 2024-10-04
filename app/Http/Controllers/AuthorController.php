@@ -4,22 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthorRequest;
 use App\Http\Resources\AuthorResource;
+use App\Http\Resources\CategoryResource;
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AuthorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(AuthorRequest $request)
     {
         $validatedData = $request->validated();
@@ -34,25 +30,30 @@ class AuthorController extends Controller
         return new AuthorResource($author);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(AuthorRequest $request, Author $author)
     {
-        //
+        $validatedData = $request->validated();
+
+        if ($request->hasFile('picture')) {
+            $path = $request->file('picture')->store('author-pictures', 'public');
+
+            if ($author->picture) {
+                Storage::disk('public')->delete($author->picture);
+            }
+
+            $validatedData['picture'] = $path;
+        }
+
+        $author->update($validatedData);
+
+        return new AuthorResource($author);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
