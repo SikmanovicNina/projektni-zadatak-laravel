@@ -28,9 +28,10 @@ class AuthorController extends Controller
         return new AuthorResource($author);
     }
 
-    public function show(string $id)
+    public function show(Author $author)
     {
-        //
+        return new AuthorResource($author);
+
     }
 
     public function update(AuthorRequest $request, Author $author)
