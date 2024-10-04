@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\LibrarianMiddleware;
@@ -16,6 +17,7 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPicture']);
 
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('genres', GenreController::class);
 
 });
 
