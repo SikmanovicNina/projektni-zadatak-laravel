@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthorRequest;
 use App\Http\Resources\AuthorResource;
-use App\Http\Resources\CategoryResource;
 use App\Models\Author;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AuthorController extends Controller
@@ -54,8 +52,14 @@ class AuthorController extends Controller
         return new AuthorResource($author);
     }
 
-    public function destroy(string $id)
+    public function destroy(Author $author)
     {
-        //
+        if ($author->picture) {
+            Storage::disk('public')->delete($author->picture);
+        }
+
+        $author->delete();
+
+        return response()->json(['message' => 'Author deleted successfully.'], 200);
     }
 }
