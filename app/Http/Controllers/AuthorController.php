@@ -5,13 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthorRequest;
 use App\Http\Resources\AuthorResource;
 use App\Models\Author;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AuthorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('per_page', 20);
+
+        if (!in_array($perPage, Author::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
+
+        $categories = Author::filter($request->only(['search']))->paginate($perPage);
+
+        return AuthorResource::collection($categories);
     }
 
     public function store(AuthorRequest $request)
