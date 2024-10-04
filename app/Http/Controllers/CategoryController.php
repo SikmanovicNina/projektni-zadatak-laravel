@@ -28,8 +28,7 @@ class CategoryController extends Controller
         $validatedData = $request->validated();
 
         if ($request->hasFile('icon')) {
-            $path = $request->file('icon')->store('icons', 'public');
-            $validatedData['icon'] = $path;
+            $validatedData['icon'] = $this->setPicturePath($request);
         }
 
         $category = Category::create($validatedData);
@@ -51,7 +50,7 @@ class CategoryController extends Controller
             $path = $request->file('icon')->store('icons', 'public');
 
             if ($category->icon) {
-                Storage::disk('public')->delete($category->icon);
+                $this->deletePicture($category);
             }
 
             $validatedData['icon'] = $path;
@@ -65,11 +64,21 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if ($category->icon) {
-            Storage::disk('public')->delete($category->icon);
+            $this->deletePicture($category);
         }
 
         $category->delete();
 
         return response()->json(['message' => 'Category deleted successfully.'], 200);
+    }
+
+    private function setPicturePath($request)
+    {
+        return $request->file('icon')->store('icons', 'public');
+    }
+
+    private function deletePicture(Category $category)
+    {
+        Storage::disk('public')->delete($category->icon);
     }
 }

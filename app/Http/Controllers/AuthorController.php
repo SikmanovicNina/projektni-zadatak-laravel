@@ -28,8 +28,7 @@ class AuthorController extends Controller
         $validatedData = $request->validated();
 
         if ($request->hasFile('picture')) {
-            $path = $request->file('picture')->store('author-pictures', 'public');
-            $validatedData['picture'] = $path;
+            $validatedData['picture'] = $this->setPicturePath($request);
         }
 
         $author = Author::create($validatedData);
@@ -48,13 +47,12 @@ class AuthorController extends Controller
         $validatedData = $request->validated();
 
         if ($request->hasFile('picture')) {
-            $path = $request->file('picture')->store('author-pictures', 'public');
+
+            $validatedData['picture'] = $this->setPicturePath($request);
 
             if ($author->picture) {
-                Storage::disk('public')->delete($author->picture);
+                $this->deletePicture($author);
             }
-
-            $validatedData['picture'] = $path;
         }
 
         $author->update($validatedData);
@@ -65,11 +63,21 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         if ($author->picture) {
-            Storage::disk('public')->delete($author->picture);
+            $this->deletePicture($author);
         }
 
         $author->delete();
 
         return response()->json(['message' => 'Author deleted successfully.'], 200);
+    }
+
+    private function setPicturePath($request)
+    {
+        return $request->file('picture')->store('author-pictures', 'public');
+    }
+
+    private function deletePicture(Author $author)
+    {
+        Storage::disk('public')->delete($author->picture);
     }
 }
