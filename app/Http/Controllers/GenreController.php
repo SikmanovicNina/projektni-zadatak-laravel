@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GenreRequest;
 use App\Http\Resources\GenreResource;
 use App\Models\Genre;
+use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('per_page', 10);
+
+        $genres = Genre::filter($request->only(['search']))->paginate($perPage);
+
+        return GenreResource::collection($genres);
     }
 
     public function store(GenreRequest $request)
