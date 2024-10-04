@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
     use HasFactory;
+    use Filterable;
 
     protected $fillable = [
         'name',
@@ -16,10 +18,7 @@ class Genre extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['search'] ?? false, fn ($query, $search) =>
-        $query->where('name', 'like', '%'.$search.'%'));
-
-        return $query;
+        $this->applyFilters($query, $filters, ['name']);
     }
 
 }

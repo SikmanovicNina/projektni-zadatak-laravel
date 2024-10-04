@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,6 +14,7 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+    use Filterable;
 
     public const ROLE_LIBRARIAN = 2;
 
@@ -45,15 +47,6 @@ class User extends Authenticatable
 
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['search'] ?? false, fn ($query, $search) =>
-        $query->where(fn ($query) =>
-        $query->where('first_name', 'like', '%'.$search.'%')
-              ->orWhere('last_name', 'like', '%'.$search.'%')
-              ->orWhere('username', 'like', '%'.$search.'%')));
-
-        $query->when($filters['role_id'] ?? false, fn ($query, $roleId) =>
-        $query->where('role_id', $roleId));
-
-        return $query;
+        $this->applyFilters($query, $filters, ['first_name', 'last_name', 'username']);
     }
 }

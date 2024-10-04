@@ -18,9 +18,9 @@ class AuthorController extends Controller
             $perPage = 20;
         }
 
-        $categories = Author::filter($request->only(['search']))->paginate($perPage);
+        $authors = Author::filter($request->only(['search']))->paginate($perPage);
 
-        return AuthorResource::collection($categories);
+        return AuthorResource::collection($authors);
     }
 
     public function store(AuthorRequest $request)

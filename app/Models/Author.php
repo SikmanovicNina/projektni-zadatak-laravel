@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Author extends Model
 {
     use HasFactory;
+    use Filterable;
 
     public const PER_PAGE_OPTIONS = [20, 50, 100];
     protected $fillable = [
@@ -19,11 +21,6 @@ class Author extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['search'] ?? false, fn ($query, $search) =>
-        $query->where(fn ($query) =>
-        $query->where('first_name', 'like', '%' . $search . '%')
-              ->orWhere('last_name', 'like', '%' . $search . '%')));
-
-        return $query;
+        $this->applyFilters($query, $filters, ['first_name', 'last_name']);
     }
 }
