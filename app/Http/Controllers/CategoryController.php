@@ -5,13 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('per_page', 20);
+
+        if (!in_array($perPage, Category::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
+
+        $categories = Category::filter($request->only(['search']))->paginate($perPage);
+
+        return CategoryResource::collection($categories);
     }
 
     public function store(CategoryRequest $request)
