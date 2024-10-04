@@ -39,6 +39,8 @@ class GenreController extends Controller
 
     public function destroy(Genre $genre)
     {
-        //
+        $genre->delete();
+
+        return response()->json(['message' => 'Genre deleted successfully.']);
     }
 }
