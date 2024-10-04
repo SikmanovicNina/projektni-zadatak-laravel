@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GenreRequest;
+use App\Http\Resources\GenreResource;
 use App\Models\Genre;
-use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
@@ -19,7 +19,7 @@ class GenreController extends Controller
 
         $genre = Genre::create($validatedData);
 
-        return response()->json($genre, 201);
+        return new GenreResource($genre);
     }
 
     public function show(Genre $genre)
@@ -27,14 +27,14 @@ class GenreController extends Controller
         //
     }
 
-    public function edit()
+    public function update(GenreRequest $request, Genre $genre)
     {
-        //
-    }
+        $validatedData = $request->validated();
 
-    public function update(Request $request)
-    {
-        //
+        $genre->update($validatedData);
+
+        return new GenreResource($genre);
+
     }
 
     public function destroy(Genre $genre)
