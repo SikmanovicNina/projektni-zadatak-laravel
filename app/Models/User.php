@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -46,8 +45,6 @@ class User extends Authenticatable
 
     public function scopeFilter($query, array $filters)
     {
-        Log::info('filters', $filters);
-
         $query->when($filters['search'] ?? false, fn ($query, $search) =>
         $query->where(fn ($query) =>
         $query->where('first_name', 'like', '%'.$search.'%')

@@ -17,7 +17,6 @@ class LibrarianMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (Auth::user()?->role_id === User::ROLE_LIBRARIAN) {
             return $next($request);
         }

@@ -65,7 +65,6 @@ class UserController extends Controller
         ]);
 
         $path = $request->file('picture')->store('user-pictures', 'public');
-
         $user->profile_picture = $path;
 
         $user->save();

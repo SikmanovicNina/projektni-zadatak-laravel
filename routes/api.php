@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\LibrarianMiddleware;
@@ -13,6 +14,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function () {
     Route::apiResource('users', UserController::class);
     Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPicture']);
+
+    Route::apiResource('categories', CategoryController::class);
+
 });
 
 Route::post('/password/reset-request', [PasswordResetController::class, 'sendResetPasswordEmail'])->name('password.reset-request');
