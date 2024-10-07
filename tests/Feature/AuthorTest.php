@@ -29,9 +29,7 @@ it('can create an author', function () {
     $data = Author::factory()->raw(['picture' => $file]);
 
     $response = $this->postJson(route('authors.store'), $data);
-
     $response->assertStatus(201);
-
     $this->assertDatabaseHas('authors', [
         'first_name' => $data['first_name'],
         'last_name' => $data['last_name'],
@@ -51,26 +49,23 @@ it('can update an author with a new picture', function () {
 
     $newFile = UploadedFile::fake()->image('new-profile.jpg');
 
-    $data = [
+    $updatedData = [
         'first_name' => 'Updated First Name',
         'last_name' => 'Updated Last Name',
         'biography' => 'Updated biography.',
         'picture' => $newFile,
     ];
 
-    $response = $this->putJson(route('authors.update', $author->id), $data);
-
+    $response = $this->putJson(route('authors.update', $author->id), $updatedData);
     $response->assertStatus(200);
-
     $this->assertDatabaseHas('authors', [
         'id' => $author->id,
-        'first_name' => $data['first_name'],
-        'last_name' => $data['last_name'],
-        'biography' => $data['biography'],
+        'first_name' => $updatedData['first_name'],
+        'last_name' => $updatedData['last_name'],
+        'biography' => $updatedData['biography'],
     ]);
 
     Storage::disk('public')->assertMissing('author-pictures/' . $author->picture);
-
     Storage::disk('public')->assertExists('author-pictures/' . $newFile->hashName());
 });
 
@@ -83,9 +78,7 @@ it('can delete an author', function () {
     Storage::disk('public')->put('author-pictures/' . $file->hashName(), file_get_contents($file));
 
     $response = $this->deleteJson(route('authors.destroy', $author->id));
-
     $response->assertStatus(200);
-
     $this->assertDatabaseMissing('authors', [
         'id' => $author->id,
         'first_name' => $author->first_name,
