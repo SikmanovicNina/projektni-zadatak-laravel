@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PublisherRequest;
 use App\Http\Resources\PublisherResource;
 use App\Models\Publisher;
-use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
@@ -28,9 +27,13 @@ class PublisherController extends Controller
         //
     }
 
-    public function update(Request $request, string $id)
+    public function update(PublisherRequest $request, Publisher $publisher)
     {
-        //
+        $validatedData = $request->validated();
+
+        $publisher->update($validatedData);
+
+        return new PublisherResource($publisher);
     }
 
     public function destroy(string $id)
