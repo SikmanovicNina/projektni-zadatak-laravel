@@ -11,6 +11,10 @@ class Publisher extends Model
     use HasFactory;
     use Filterable;
 
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class);
+    }
     public const PER_PAGE_OPTIONS = [20, 50, 100];
     protected $fillable = [
         'name',
