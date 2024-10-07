@@ -36,8 +36,10 @@ class PublisherController extends Controller
         return new PublisherResource($publisher);
     }
 
-    public function destroy(string $id)
+    public function destroy(Publisher $publisher)
     {
-        //
+        $publisher->delete();
+
+        return response()->json(['message' => 'Publisher deleted successfully.'], 200);
     }
 }
