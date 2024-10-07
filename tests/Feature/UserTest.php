@@ -112,7 +112,7 @@ it('can retrieve a specific user', function () {
     $response->assertJson($user->toArray());
 });
 
-it('can delete user', function () {
+it('can delete a user', function () {
     authenticateLibrarian();
 
     $user = User::factory()->create();
