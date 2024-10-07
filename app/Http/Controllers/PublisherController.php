@@ -22,9 +22,9 @@ class PublisherController extends Controller
         return new PublisherResource($publisher);
     }
 
-    public function show(string $id)
+    public function show(Publisher $publisher)
     {
-        //
+        return new PublisherResource($publisher);
     }
 
     public function update(PublisherRequest $request, Publisher $publisher)
