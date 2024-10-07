@@ -95,4 +95,3 @@ it('can delete an author', function () {
 
     Storage::disk('public')->assertMissing('author-pictures/' . $author->picture);
 });
-

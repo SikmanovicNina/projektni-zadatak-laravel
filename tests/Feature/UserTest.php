@@ -57,7 +57,6 @@ it('can store a new user', function () {
     $data = User::factory()->raw();
 
     $response = $this->postJson(route('users.store'), $data);
-
     $response->assertStatus(201);
 
     unset($data['password']);
@@ -71,10 +70,9 @@ it('cannot store a new user without a username', function () {
     authenticateLibrarian();
 
     $data = User::factory()->raw();
-
     unset($data['username']);
-    $response = $this->postJson(route('users.store'), $data);
 
+    $response = $this->postJson(route('users.store'), $data);
     $response->assertStatus(422);
     $response->assertJsonValidationErrors('username');
 });
@@ -90,7 +88,6 @@ it('can update user', function () {
     ]);
 
     $response = $this->putJson(route('users.update', $user->id), $updatedData);
-
     $response->assertStatus(200);
 
     unset($updatedData['password']);
@@ -106,9 +103,7 @@ it('can retrieve a specific user', function () {
     $user = User::factory()->create();
 
     $response = $this->getJson(route('users.show', $user->id));
-
     $response->assertStatus(200);
-
     $response->assertJson($user->toArray());
 });
 
@@ -116,6 +111,7 @@ it('can delete a user', function () {
     authenticateLibrarian();
 
     $user = User::factory()->create();
+
     $response = $this->deleteJson(route('users.destroy', $user->id));
     $response->assertStatus(200);
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
