@@ -5,12 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PublisherRequest;
 use App\Http\Resources\PublisherResource;
 use App\Models\Publisher;
+use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        $perPage = $request->input('per_page', 20);
+
+        if (!in_array($perPage, Publisher::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
+
+        $authors = Publisher::filter($request->only(['search']))->paginate($perPage);
+
+        return PublisherResource::collection($authors);
     }
 
     public function store(PublisherRequest $request)
