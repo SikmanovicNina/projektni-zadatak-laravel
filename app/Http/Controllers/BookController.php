@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
-use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -37,8 +36,10 @@ class BookController extends Controller
         return new BookResource($book);
     }
 
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return response()->json(['message' => 'Book deleted successfully.'], 200);
     }
 }
