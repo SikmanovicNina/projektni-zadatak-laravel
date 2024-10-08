@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PasswordResetRequested;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -16,9 +17,13 @@ class UserController extends Controller
     {
         $perPage = $request->input('per_page', 20);
 
+        if (!in_array($perPage, User::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
+
         $users = User::latest()->filter($request->only(['search', 'role_id']))->paginate($perPage);
 
-        return response()->json($users);
+        return UserResource::collection($users);
     }
 
     public function store(UserRequest $request)
@@ -31,14 +36,14 @@ class UserController extends Controller
             event(new PasswordResetRequested($user));
         }
 
-        return response()->json($user, 201);
+        return new UserResource($user);
     }
 
     public function show(User $user)
     {
         $user = $user->load('role');
 
-        return response()->json($user, 200);
+        return new UserResource($user);
     }
 
     public function update(UserRequest $request, User $user)
@@ -47,15 +52,14 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return response()->json($user, 200);
-
+        return new UserResource($user);
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return response()->json(204);
+        return new UserResource($user);
     }
 
     public function uploadPicture(Request $request, User $user)

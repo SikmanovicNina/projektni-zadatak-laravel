@@ -18,6 +18,8 @@ class User extends Authenticatable
 
     public const ROLE_LIBRARIAN = 2;
 
+    public const PER_PAGE_OPTIONS = [20, 50, 100];
+
     protected $fillable = [
         'first_name',
         'last_name',
