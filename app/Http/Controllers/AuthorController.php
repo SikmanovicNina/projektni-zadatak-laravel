@@ -46,7 +46,6 @@ class AuthorController extends Controller
         $validatedData = $request->validated();
 
         if ($request->hasFile('picture')) {
-
             $validatedData['picture'] = $this->setPicturePath($request);
 
             if ($author->picture) {

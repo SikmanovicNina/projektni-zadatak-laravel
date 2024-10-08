@@ -12,6 +12,7 @@ class Category extends Model
     use Filterable;
 
     public const PER_PAGE_OPTIONS = [20, 50, 100];
+
     protected $fillable = [
         'name',
         'description',
