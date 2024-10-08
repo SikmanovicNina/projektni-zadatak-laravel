@@ -34,7 +34,6 @@ class CategoryController extends Controller
         $category = Category::create($validatedData);
 
         return new CategoryResource($category);
-
     }
 
     public function show(Category $category)
