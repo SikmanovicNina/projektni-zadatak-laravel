@@ -23,7 +23,10 @@ class UserController extends Controller
 
         $users = User::latest()->filter($request->only(['search', 'role_id']))->paginate($perPage);
 
-        return UserResource::collection($users);
+        return response()->json([
+            'status' => 'success',
+            'data' => UserResource::collection($users)
+        ]);
     }
 
     public function store(UserRequest $request)
@@ -36,14 +39,20 @@ class UserController extends Controller
             event(new PasswordResetRequested($user));
         }
 
-        return new UserResource($user);
+        return response()->json([
+            'status' => 'success',
+            'data' => new UserResource($user)
+        ]);
     }
 
     public function show(User $user)
     {
         $user = $user->load('role');
 
-        return new UserResource($user);
+        return response()->json([
+            'status' => 'success',
+            'data' => new UserResource($user)
+        ]);
     }
 
     public function update(UserRequest $request, User $user)
@@ -52,14 +61,20 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return new UserResource($user);
+        return response()->json([
+            'status' => 'success',
+            'data' => new UserResource($user)
+        ]);
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return new UserResource($user);
+        return response()->json([
+            'status' => 'success',
+            'data' => new UserResource($user)
+        ]);
     }
 
     public function uploadPicture(Request $request, User $user)

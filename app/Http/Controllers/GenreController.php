@@ -15,7 +15,10 @@ class GenreController extends Controller
 
         $genres = Genre::filter($request->only(['search']))->paginate($perPage);
 
-        return GenreResource::collection($genres);
+        return response()->json([
+            'status' => 'success',
+            'data' => GenreResource::collection($genres)
+        ]);
     }
 
     public function store(GenreRequest $request)
@@ -24,12 +27,18 @@ class GenreController extends Controller
 
         $genre = Genre::create($validatedData);
 
-        return new GenreResource($genre);
+        return response()->json([
+            'status' => 'success',
+            'data' => new GenreResource($genre)
+        ]);
     }
 
     public function show(Genre $genre)
     {
-        return new GenreResource($genre);
+        return response()->json([
+            'status' => 'success',
+            'data' => new GenreResource($genre)
+        ]);
     }
 
     public function update(GenreRequest $request, Genre $genre)
@@ -38,8 +47,10 @@ class GenreController extends Controller
 
         $genre->update($validatedData);
 
-        return new GenreResource($genre);
-
+        return response()->json([
+            'status' => 'success',
+            'data' => new GenreResource($genre)
+        ]);
     }
 
     public function destroy(Genre $genre)

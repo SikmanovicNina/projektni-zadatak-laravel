@@ -20,7 +20,10 @@ class PublisherController extends Controller
 
         $authors = Publisher::filter($request->only(['search']))->paginate($perPage);
 
-        return PublisherResource::collection($authors);
+        return response()->json([
+            'status' => 'success',
+            'data' => PublisherResource::collection($authors)
+        ]);
     }
 
     public function store(PublisherRequest $request)
@@ -29,12 +32,18 @@ class PublisherController extends Controller
 
         $publisher = Publisher::create($validatedData);
 
-        return new PublisherResource($publisher);
+        return response()->json([
+            'status' => 'success',
+            'data' => new PublisherResource($publisher)
+        ]);
     }
 
     public function show(Publisher $publisher)
     {
-        return new PublisherResource($publisher);
+        return response()->json([
+            'status' => 'success',
+            'data' => new PublisherResource($publisher)
+        ]);
     }
 
     public function update(PublisherRequest $request, Publisher $publisher)
@@ -43,7 +52,10 @@ class PublisherController extends Controller
 
         $publisher->update($validatedData);
 
-        return new PublisherResource($publisher);
+        return response()->json([
+            'status' => 'success',
+            'data' => new PublisherResource($publisher)
+        ]);
     }
 
     public function destroy(Publisher $publisher)

@@ -20,7 +20,10 @@ class AuthorController extends Controller
 
         $authors = Author::filter($request->only(['search']))->paginate($perPage);
 
-        return AuthorResource::collection($authors);
+        return response()->json([
+            'status' => 'success',
+            'data' => AuthorResource::collection($authors)
+        ]);
     }
 
     public function store(AuthorRequest $request)
@@ -33,12 +36,18 @@ class AuthorController extends Controller
 
         $author = Author::create($validatedData);
 
-        return new AuthorResource($author);
+        return response()->json([
+            'status' => 'success',
+            'data' => new AuthorResource($author)
+        ]);
     }
 
     public function show(Author $author)
     {
-        return new AuthorResource($author);
+        return response()->json([
+            'status' => 'success',
+            'data' => new AuthorResource($author)
+        ]);
     }
 
     public function update(AuthorRequest $request, Author $author)
@@ -55,7 +64,10 @@ class AuthorController extends Controller
 
         $author->update($validatedData);
 
-        return new AuthorResource($author);
+        return response()->json([
+            'status' => 'success',
+            'data' => new AuthorResource($author)
+        ]);
     }
 
     public function destroy(Author $author)
