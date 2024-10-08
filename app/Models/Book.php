@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
     use HasFactory;
+    use Filterable;
 
     public const SCRIPTS = ['Cyrillic', 'Latin', 'Arabic'];
     public const BINDINGS = ['Hardcover', 'Paperback', 'Spiral-bound'];
@@ -24,6 +26,11 @@ class Book extends Model
         'binding',
         'dimensions',
     ];
+
+    public function scopeFilter($query, array $filters)
+    {
+        $this->applyFilters($query, $filters, ['name', 'description', 'language', 'isbn']);
+    }
 
     public function categories()
     {

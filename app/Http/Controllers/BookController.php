@@ -4,13 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
+use Illuminate\Http\Request;
 use App\Models\Book;
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('per_page', 20);
+
+        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
+
+        $authors = Book::filter($request->only(['search']))->paginate($perPage);
+
+        return BookResource::collection($authors);
     }
 
     public function store(BookRequest $request)
