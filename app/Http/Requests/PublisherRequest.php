@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PublisherRequest extends FormRequest
 {
@@ -21,13 +22,20 @@ class PublisherRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->route('publisher') ? $this->route('publisher')->id : null;
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:1000'],
             'website' => ['nullable', 'url', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:publishers,email'],
             'phone_number' => ['nullable', 'string', 'max:50'],
             'established_year' => ['nullable', 'digits:4', 'integer'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('publishers', 'email')->ignore($userId)],
         ];
 
     }
