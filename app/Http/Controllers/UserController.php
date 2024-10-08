@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         $perPage = $request->input('per_page', 20);
 
-        if (!in_array($perPage, User::PER_PAGE_OPTIONS)) {
+        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
             $perPage = 20;
         }
 
