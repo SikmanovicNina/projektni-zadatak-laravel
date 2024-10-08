@@ -20,7 +20,10 @@ class CategoryController extends Controller
 
         $categories = Category::filter($request->only(['search']))->paginate($perPage);
 
-        return CategoryResource::collection($categories);
+        return response()->json([
+            'status' => 'success',
+            'data' => CategoryResource::collection($categories)
+        ]);
     }
 
     public function store(CategoryRequest $request)
@@ -33,12 +36,18 @@ class CategoryController extends Controller
 
         $category = Category::create($validatedData);
 
-        return new CategoryResource($category);
+        return response()->json([
+            'status' => 'success',
+            'data' => new CategoryResource($category)
+        ]);
     }
 
     public function show(Category $category)
     {
-        return new CategoryResource($category);
+        return response()->json([
+            'status' => 'success',
+            'data' => new CategoryResource($category)
+        ]);
     }
 
     public function update(CategoryRequest $request, Category $category)
@@ -57,7 +66,10 @@ class CategoryController extends Controller
 
         $category->update($validatedData);
 
-        return new CategoryResource($category);
+        return response()->json([
+            'status' => 'success',
+            'data' => new CategoryResource($category)
+        ]);
     }
 
     public function destroy(Category $category)

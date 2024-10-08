@@ -35,7 +35,8 @@ class PublisherRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('publishers', 'email')->ignore($userId)],
+                Rule::unique('publishers', 'email')->ignore($userId)
+            ],
         ];
 
     }
