@@ -23,9 +23,9 @@ class BookController extends Controller
         return new BookResource($book);
     }
 
-    public function show(string $id)
+    public function show(Book $book)
     {
-        //
+        return new BookResource($book);
     }
 
     public function update(BookRequest $request, Book $book)
