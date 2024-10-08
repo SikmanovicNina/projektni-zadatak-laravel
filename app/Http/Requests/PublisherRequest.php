@@ -22,7 +22,7 @@ class PublisherRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userId = $this->route('publisher') ? $this->route('publisher')->id : null;
+        $publisherId = $this->route('publisher') ? $this->route('publisher')->id : null;
 
         return [
             'name' => ['required', 'string', 'max:255'],
@@ -35,7 +35,7 @@ class PublisherRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('publishers', 'email')->ignore($userId)],
+                Rule::unique('publishers', 'email')->ignore($publisherId)],
         ];
 
     }

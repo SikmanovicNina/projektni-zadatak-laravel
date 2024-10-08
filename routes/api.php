@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
@@ -18,6 +19,7 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::apiResource('users', UserController::class);
     Route::post('users/{user}/upload-picture', [UserController::class, 'uploadPicture']);
 
+    Route::apiResource('books', BookController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('genres', GenreController::class);
     Route::apiResource('authors', AuthorController::class);
