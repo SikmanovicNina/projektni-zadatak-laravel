@@ -29,9 +29,9 @@ class BookRequest extends FormRequest
                 'max:13'
             ],
             'language' => ['required', 'string', 'max:50'],
-            'binding' => ['required', 'string', 'in:' . implode(',', Book::BINDINGS)],
-            'script' => ['required', 'string', 'in:' . implode(',', Book::SCRIPTS)],
-            'dimensions' => ['required', 'string', 'in:' . implode(',', Book::DIMENSIONS)],
+            'binding' => ['required', 'string', Rule::in(Book::BINDINGS)],
+            'script' => ['required', 'string', Rule::in(Book::SCRIPTS)],
+            'dimensions' => ['required', 'string', Rule::in(Book::DIMENSIONS)],
         ];
 
     }
