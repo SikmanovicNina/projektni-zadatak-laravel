@@ -22,13 +22,13 @@ class GenreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userId = $this->route('genre') ? $this->route('genre')->id : null;
+        $genreId = $this->route('genre') ? $this->route('genre')->id : null;
 
         return [
             'name' => [
                 'required',
                 'max:255',
-                Rule::unique('genres', 'name')->ignore($userId)
+                Rule::unique('genres', 'name')->ignore($genreId)
             ],
             'description' => ['required', 'max:255'],
         ];
