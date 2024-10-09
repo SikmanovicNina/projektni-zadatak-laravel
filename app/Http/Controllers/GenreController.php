@@ -5,43 +5,86 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GenreRequest;
 use App\Http\Resources\GenreResource;
 use App\Models\Genre;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
+    /**
+     *  Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
 
         $genres = Genre::filter($request->only(['search']))->paginate($perPage);
 
-        return GenreResource::collection($genres);
+        return response()->json([
+            'status' => 'success',
+            'data' => GenreResource::collection($genres)
+        ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param GenreRequest $request
+     * @return JsonResponse
+     */
     public function store(GenreRequest $request)
     {
         $validatedData = $request->validated();
 
         $genre = Genre::create($validatedData);
 
-        return new GenreResource($genre);
+        return response()->json([
+            'status' => 'success',
+            'data' => new GenreResource($genre)
+        ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param Genre $genre
+     * @return JsonResponse
+     */
     public function show(Genre $genre)
     {
-        return new GenreResource($genre);
+        return response()->json([
+            'status' => 'success',
+            'data' => new GenreResource($genre)
+        ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param GenreRequest $request
+     * @param Genre $genre
+     * @return JsonResponse
+     */
     public function update(GenreRequest $request, Genre $genre)
     {
         $validatedData = $request->validated();
 
         $genre->update($validatedData);
 
-        return new GenreResource($genre);
-
+        return response()->json([
+            'status' => 'success',
+            'data' => new GenreResource($genre)
+        ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Genre $genre
+     * @return JsonResponse
+     */
     public function destroy(Genre $genre)
     {
         $genre->delete();

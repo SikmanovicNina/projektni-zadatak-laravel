@@ -28,7 +28,8 @@ class GenreRequest extends FormRequest
             'name' => [
                 'required',
                 'max:255',
-                Rule::unique('genres', 'name')->ignore($genreId)],
+                Rule::unique('genres', 'name')->ignore($genreId)
+            ],
             'description' => ['required', 'max:255'],
         ];
     }

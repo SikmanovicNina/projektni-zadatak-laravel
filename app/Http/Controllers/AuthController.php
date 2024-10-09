@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Authenticate a user and issue an API token.
+     *
+     * @param Request $request The incoming request containing login credentials.
+     * @return JsonResponse
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -30,6 +37,12 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Log out the authenticated user by revoking all API tokens.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();

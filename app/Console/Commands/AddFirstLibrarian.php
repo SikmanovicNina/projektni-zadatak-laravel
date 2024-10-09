@@ -44,15 +44,14 @@ class AddFirstLibrarian extends Command
             return 1;
         }
 
-        $librarian = new User();
-        $librarian->first_name = $firstName;
-        $librarian->last_name = $lastName;
-        $librarian->email = $email;
-        $librarian->username = $username;
-        $librarian->jmbg = $jmbg;
-        $librarian->role_id = User::ROLE_LIBRARIAN;
-
-        $librarian->save();
+        $librarian = User::create([
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email' => $email,
+            'username' => $username,
+            'jmbg' => $jmbg,
+            'role_id' => User::ROLE_LIBRARIAN
+        ]);
 
         event(new PasswordResetRequested($librarian));
 
