@@ -122,7 +122,7 @@ class UserController extends Controller
             'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
-        $path = $request->file('picture')->store('user-pictures', 'public');
+        $path = $request->file('picture')->store('user-images', 'public');
         $user->profile_picture = $path;
 
         $user->save();
