@@ -5,11 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthorRequest;
 use App\Http\Resources\AuthorResource;
 use App\Models\Author;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AuthorController extends Controller
 {
+    /**
+     *  Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 20);
@@ -26,6 +33,12 @@ class AuthorController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param AuthorRequest $request
+     * @return JsonResponse
+     */
     public function store(AuthorRequest $request)
     {
         $validatedData = $request->validated();
@@ -42,6 +55,12 @@ class AuthorController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param Author $author
+     * @return JsonResponse
+     */
     public function show(Author $author)
     {
         return response()->json([
@@ -50,6 +69,13 @@ class AuthorController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param AuthorRequest $request
+     * @param Author $author
+     * @return JsonResponse
+     */
     public function update(AuthorRequest $request, Author $author)
     {
         $validatedData = $request->validated();
@@ -70,6 +96,12 @@ class AuthorController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Author $author
+     * @return JsonResponse
+     */
     public function destroy(Author $author)
     {
         if ($author->picture) {
@@ -81,11 +113,23 @@ class AuthorController extends Controller
         return response()->json(['message' => 'Author deleted successfully.'], 200);
     }
 
+    /**
+     * Handle the uploading and storage of the author's picture.
+     *
+     * @param Request $request
+     * @return string The path where the picture is stored.
+     */
     private function setPicturePath($request)
     {
         return $request->file('picture')->store('author-pictures', 'public');
     }
 
+    /**
+     * Delete the author's picture from storage.
+     *
+     * @param Author $author
+     * @return void
+     */
     private function deletePicture(Author $author)
     {
         Storage::disk('public')->delete($author->picture);

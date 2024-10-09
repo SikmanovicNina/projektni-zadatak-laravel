@@ -5,11 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
+    /**
+     *  Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 20);
@@ -26,6 +33,12 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param CategoryRequest $request
+     * @return JsonResponse
+     */
     public function store(CategoryRequest $request)
     {
         $validatedData = $request->validated();
@@ -42,6 +55,12 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param Category $category
+     * @return JsonResponse
+     */
     public function show(Category $category)
     {
         return response()->json([
@@ -50,6 +69,13 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param CategoryRequest $request
+     * @param Category $category
+     * @return JsonResponse
+     */
     public function update(CategoryRequest $request, Category $category)
     {
         $validatedData = $request->validated();
@@ -72,6 +98,12 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Category $category
+     * @return JsonResponse
+     */
     public function destroy(Category $category)
     {
         if ($category->icon) {
@@ -83,11 +115,23 @@ class CategoryController extends Controller
         return response()->json(['message' => 'Category deleted successfully.'], 200);
     }
 
+    /**
+     * Handle the uploading and storage of the category's picture.
+     *
+     * @param Request $request
+     * @return string The path where the picture is stored.
+     */
     private function setPicturePath($request)
     {
         return $request->file('icon')->store('icons', 'public');
     }
 
+    /**
+     * Delete the category's picture from storage.
+     *
+     * @param Category $category
+     * @return void
+     */
     private function deletePicture(Category $category)
     {
         Storage::disk('public')->delete($category->icon);

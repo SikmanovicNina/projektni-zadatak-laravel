@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PublisherRequest;
 use App\Http\Resources\PublisherResource;
 use App\Models\Publisher;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
+    /**
+     *  Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request)
     {
-
         $perPage = $request->input('per_page', 20);
 
         if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
@@ -26,6 +32,12 @@ class PublisherController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param PublisherRequest $request
+     * @return JsonResponse
+     */
     public function store(PublisherRequest $request)
     {
         $validatedData = $request->validated();
@@ -38,6 +50,12 @@ class PublisherController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param Publisher $publisher
+     * @return JsonResponse
+     */
     public function show(Publisher $publisher)
     {
         return response()->json([
@@ -46,6 +64,13 @@ class PublisherController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param PublisherRequest $request
+     * @param Publisher $publisher
+     * @return JsonResponse
+     */
     public function update(PublisherRequest $request, Publisher $publisher)
     {
         $validatedData = $request->validated();
@@ -58,6 +83,12 @@ class PublisherController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Publisher $publisher
+     * @return JsonResponse
+     */
     public function destroy(Publisher $publisher)
     {
         $publisher->delete();

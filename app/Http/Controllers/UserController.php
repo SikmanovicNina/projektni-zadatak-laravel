@@ -7,12 +7,19 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     use AuthorizesRequests;
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 20);
@@ -29,6 +36,12 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param UserRequest $request
+     * @return JsonResponse
+     */
     public function store(UserRequest $request)
     {
         $validatedData = $request->validated();
@@ -45,6 +58,12 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
     public function show(User $user)
     {
         $user = $user->load('role');
@@ -55,6 +74,13 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param UserRequest $request
+     * @param User $user
+     * @return JsonResponse
+     */
     public function update(UserRequest $request, User $user)
     {
         $validatedData = $request->validated();
@@ -67,6 +93,12 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
     public function destroy(User $user)
     {
         $user->delete();
@@ -77,6 +109,13 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Upload and store the user's profile picture.
+     *
+     * @param Request $request
+     * @param User $user
+     * @return JsonResponse
+     */
     public function uploadPicture(Request $request, User $user)
     {
         $request->validate([
