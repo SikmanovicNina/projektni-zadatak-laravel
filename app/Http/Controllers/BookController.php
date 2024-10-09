@@ -19,7 +19,10 @@ class BookController extends Controller
 
         $authors = Book::filter($request->only(['search']))->paginate($perPage);
 
-        return BookResource::collection($authors);
+        return response()->json([
+            'status' => 'success',
+            'data' => BookResource::collection($authors)
+        ]);
     }
 
     public function store(BookRequest $request)
@@ -28,12 +31,18 @@ class BookController extends Controller
 
         $book = Book::create($validatedData);
 
-        return new BookResource($book);
+        return response()->json([
+            'status' => 'success',
+            'data' => new BookResource($book)
+        ]);
     }
 
     public function show(Book $book)
     {
-        return new BookResource($book);
+        return response()->json([
+            'status' => 'success',
+            'data' => new BookResource($book)
+        ]);
     }
 
     public function update(BookRequest $request, Book $book)
@@ -42,7 +51,10 @@ class BookController extends Controller
 
         $book->update($validatedData);
 
-        return new BookResource($book);
+        return response()->json([
+            'status' => 'success',
+            'data' => new BookResource($book)
+        ]);
     }
 
     public function destroy(Book $book)

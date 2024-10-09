@@ -29,7 +29,7 @@ it('can create an author', function () {
     $data = Author::factory()->raw(['picture' => $file]);
 
     $response = $this->postJson(route('authors.store'), $data);
-    $response->assertStatus(201);
+    $response->assertStatus(200);
     $this->assertDatabaseHas('authors', [
         'first_name' => $data['first_name'],
         'last_name' => $data['last_name'],

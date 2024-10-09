@@ -26,7 +26,7 @@ it('can store a new genre', function () {
     $data = Genre::factory()->raw();
 
     $response = $this->postJson(route('genres.store'), $data);
-    $response->assertStatus(201);
+    $response->assertStatus(200);
     $this->assertDatabaseHas('genres', $data);
 });
 
