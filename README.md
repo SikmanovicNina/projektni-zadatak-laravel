@@ -14,33 +14,38 @@ To get started with this application:
 1. Install dependencies:
 
     ```bash
-   ./vendor/bin/sail composer install
+   composer install
     ```
 
-3. Copy the `.env.example` file to `.env`:
+2. Copy the `.env.example` file to `.env`:
 
     ```bash
     cp .env.example .env
     ```
 
-4. Generate an application key:
+3. Generate an application key:
 
     ```bash
     ./vendor/bin/sail artisan key:generate
     ```
 
-5. Start the Sail environment:
+4. Start the Sail environment:
 
     ```bash
     ./vendor/bin/sail up
     ```
 
-6. Run migrations:
+5. Run migrations and seeders:
 
     ```bash
-    ./vendor/bin/sail artisan migrate
+    ./vendor/bin/sail artisan migrate --seed
     ```
+## Commands
+1. Add the first librarian:
 
+```bash
+./vendor/bin/sail artisan app:add-first-librarian
+```
 
 ## Environment Variables
 
