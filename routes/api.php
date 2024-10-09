@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\LibrarianMiddleware;
@@ -28,6 +29,7 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::apiResource('genres', GenreController::class);
     Route::apiResource('authors', AuthorController::class);
     Route::apiResource('publishers', PublisherController::class);
+    Route::apiResource('policies', PolicyController::class)->only(['index', 'update']);
 
 });
 
