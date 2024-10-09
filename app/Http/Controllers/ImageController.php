@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ImageController extends Controller
 {
     /**
-     * Store images for a specific book.
+     * Store image for a specific book.
      *
      * @param Request $request
      * @param Book $book
@@ -19,27 +19,25 @@ class ImageController extends Controller
     public function store(Request $request, Book $book)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
         ]);
 
-        $imagePath = [];
-
-        if ($request->hasFile('image')) {
-
-            $path = $request->file('image')->store('book-images', 'public');
-
-            $book->images()->create([
-                'image' => $path,
-                'cover_image' => false,
-            ]);
-
-            $imagePath[] = $path;
+        if (!$request->hasFile('image')) {
+            return response()->json([
+                'message' => 'No image uploaded',
+            ], 400);
         }
 
+        $path = $request->file('image')->store('book-images', 'public');
+
+        $book->images()->create([
+            'path' => $path,
+            'cover_image' => false,
+        ]);
 
         return response()->json([
-            'message' => 'Images uploaded successfully',
-            'image' => $imagePath,
+            'message' => 'Image uploaded successfully',
+            'image_path' => $path,
         ], 201);
     }
 
@@ -53,18 +51,17 @@ class ImageController extends Controller
     public function updateCoverImage(Request $request, Book $book)
     {
         $request->validate([
-            'image_id' => 'required|exists:images,id',
+            'image_id' => ['required', 'exists:images,id'],
         ]);
 
         $book->images()->update(['cover_image' => false]);
 
         $image = Image::findOrFail($request->image_id);
-
         $image->cover_image = true;
         $image->save();
 
         return response()->json([
-            'message' => 'Cover image updated successfully',
+            'message' => 'Cover image saved successfully',
             'cover_image_id' => $image->id,
         ], 200);
     }
