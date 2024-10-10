@@ -36,4 +36,9 @@ class Rental extends Model
     {
         return $query->whereNull('returned_at');
     }
+
+    public function getRentalDurationAttribute()
+    {
+        return $this->rented_at->diffForHumans(now());
+    }
 }

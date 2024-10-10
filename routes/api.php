@@ -9,6 +9,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\PublisherController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\LibrarianMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::apiResource('authors', AuthorController::class);
     Route::apiResource('publishers', PublisherController::class);
     Route::apiResource('policies', PolicyController::class)->only(['index', 'update']);
+    Route::post('rentals/rent', [RentalController::class, 'rentBook']);
+    Route::post('rentals/return', [RentalController::class, 'returnBook']);
 
 });
 
