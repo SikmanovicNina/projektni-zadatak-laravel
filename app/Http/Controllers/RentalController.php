@@ -12,6 +12,40 @@ use Illuminate\Http\JsonResponse;
 
 class RentalController extends Controller
 {
+    public function getBooksByStatus($status = null)
+    {
+        $query = Rental::query()
+            ->with(['book', 'student', 'librarian']);
+
+        switch ($status) {
+            case 'rented':
+                $query->whereNull('returned_at');
+                break;
+
+            case 'returned':
+                $query->whereNotNull('returned_at');
+                break;
+
+            case 'overdue':
+                $query->whereNull('returned_at')
+                    ->where('overdue_days', '>', 0);
+                break;
+
+            default:
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid status provided.',
+                ], 400);
+        }
+
+        $books = $query->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $books,
+        ]);
+    }
+
     /**
      *  Rent a book for a student by a librarian.
      *

@@ -27,12 +27,19 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::post('/books/{book}/cover-image', [ImageController::class, 'updateCoverImage']);
 
     Route::apiResource('categories', CategoryController::class);
+
     Route::apiResource('genres', GenreController::class);
+
     Route::apiResource('authors', AuthorController::class);
+
     Route::apiResource('publishers', PublisherController::class);
+
     Route::apiResource('policies', PolicyController::class)->only(['index', 'update']);
+
     Route::post('rentals/rent', [RentalController::class, 'rentBook']);
     Route::post('rentals/{rental}/return', [RentalController::class, 'returnBook']);
+    Route::get('/rentals/{status}', [RentalController::class, 'getBooksByStatus'])
+        ->whereIn('status', ['rented', 'returned', 'overdue']);
 
 });
 
