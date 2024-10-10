@@ -56,4 +56,8 @@ class Book extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function rentals(){
+        return $this->hasMany(Rental::class);
+    }
 }
