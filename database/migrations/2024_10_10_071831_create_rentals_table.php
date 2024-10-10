@@ -17,6 +17,8 @@ return new class () extends Migration {
             $table->foreignId('librarian_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('rented_at')->useCurrent();
             $table->timestamp('returned_at')->nullable();
+            $table->timestamp('due_date')->nullable();
+            $table->integer('overdue_days')->nullable();
             $table->timestamps();
         });
     }

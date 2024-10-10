@@ -11,4 +11,5 @@ class Policy extends Model
 
     protected $fillable = ['name', 'period'];
 
+    public const RENTAL_PERIOD = 'rental period';
 }

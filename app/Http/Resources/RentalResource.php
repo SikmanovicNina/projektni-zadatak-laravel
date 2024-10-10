@@ -19,7 +19,8 @@ class RentalResource extends JsonResource
             'book_id' => $this->book_id,
             'student_id' => $this->student_id,
             'librarian_id' => $this->librarian_id,
-            'rented_at' => $this->rented_at
+            'rented_at' => $this->rented_at,
+
         ];
     }
 }

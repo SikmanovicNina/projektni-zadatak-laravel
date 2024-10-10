@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::apiResource('publishers', PublisherController::class);
     Route::apiResource('policies', PolicyController::class)->only(['index', 'update']);
     Route::post('rentals/rent', [RentalController::class, 'rentBook']);
-    Route::post('rentals/return', [RentalController::class, 'returnBook']);
+    Route::post('rentals/{rental}/return', [RentalController::class, 'returnBook']);
 
 });
 
