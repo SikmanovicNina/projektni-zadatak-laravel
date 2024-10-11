@@ -92,12 +92,8 @@ class RentalController extends Controller
 
         $book->decrement('number_of_copies');
 
-        $rental = Rental::create([
-            'book_id' => $book->id,
-            'student_id' => $validatedData['student_id'],
-            'librarian_id' => $validatedData['librarian_id'],
-            'rented_at' => now(),
-        ]);
+        $validatedData['rented_at'] = now();
+        $rental = Rental::create($validatedData);
 
         return response()->json([
             'status' => 'success',
