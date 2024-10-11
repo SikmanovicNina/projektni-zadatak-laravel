@@ -117,7 +117,6 @@ class RentalController extends Controller
     public function returnBook(RentalRequest $request, Rental $rental)
     {
         if (!$rental->returned_at) {
-
             $rental->returned_at = now();
             $rental->save();
 
