@@ -23,30 +23,35 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'student', 'librarian']);
 
         switch ($status) {
-            case 'rented':
-                $query
-                    ->whereNull('returned_at');
+            case 'rented' || 'overdue':
+                $query->whereNull('returned_at');
                 break;
 
             case 'returned':
-                $query
-                    ->whereNotNull('returned_at');
-                break;
-
-            case 'overdue':
-                $query
-                    ->whereNull('returned_at')
-                    ->where('overdue_days', '>', 0);
+                $query->whereNotNull('returned_at');
                 break;
 
             default:
                 return response()->json([
-                    'status' => 'error',
-                    'message' => 'Invalid status provided.',
-                ], 400);
+                    'status' => 'success',
+                    'data' => $query->get()
+                ]);
         }
 
         $books = $query->get();
+
+        if ($status === 'overdue') {
+            $books = $books->filter(function ($rental) {
+                $overdueDays = $this->calculateOverdueDays($rental);
+
+                if ($overdueDays > 0) {
+                    $rental->overdue_days = $overdueDays;
+                    return true;
+                }
+
+                return false;
+            });
+        }
 
         if (in_array($status, ['rented', 'overdue'])) {
             $books->each(function ($rental) {
@@ -100,18 +105,31 @@ class RentalController extends Controller
         ]);
     }
 
+    /**
+     * Handles the process of returning a rented book.
+     *
+     *  This method checks if the book has already been returned. If not, it marks
+     *  the book as returned by updating the `returned_at` timestamp, increments
+     *  the number of available copies of the book in the database, calculates
+     *  any overdue days, and returns a success response with the number of
+     *  overdue days. If the book has already been returned, it returns an error response.
+     *
+     * @param RentalRequest $request
+     * @param Rental $rental
+     * @return JsonResponse
+     */
     public function returnBook(RentalRequest $request, Rental $rental)
     {
         if (!$rental->returned_at) {
-            $overdueDays = $this->calculateOverdueDays($rental);
 
             $rental->returned_at = now();
-            $rental->overdue_days = $overdueDays;
             $rental->save();
 
             $book = $rental->book;
             $book->increment('number_of_copies');
             $book->save();
+
+            $overdueDays = $this->calculateOverdueDays($rental);
 
             return response()->json([
                 'message' => 'Book returned successfully.',
@@ -124,6 +142,12 @@ class RentalController extends Controller
         ], 400);
     }
 
+    /**
+     * Calculates the number of overdue days for a given rental.
+     *
+     * @param Rental $rental
+     * @return float|int
+     */
     private function calculateOverdueDays(Rental $rental)
     {
         $rentalPolicy = Policy::where('name', Policy::RENTAL_PERIOD)->first();
@@ -136,6 +160,12 @@ class RentalController extends Controller
         return 0;
     }
 
+    /**
+     *  Calculates the difference in days between a given start date and the current date.
+     *
+     * @param $startDate
+     * @return float
+     */
     private function calculateDaysDifference($startDate)
     {
         $from_date = Carbon::parse(date('Y-m-d', strtotime($startDate)));

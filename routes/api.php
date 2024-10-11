@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
 
     Route::post('rentals/rent', [RentalController::class, 'rentBook']);
     Route::post('rentals/{rental}/return', [RentalController::class, 'returnBook']);
-    Route::get('/rentals/{status}', [RentalController::class, 'getBooksByStatus'])
+    Route::get('/rentals/{status?}', [RentalController::class, 'getBooksByStatus'])
         ->whereIn('status', ['rented', 'returned', 'overdue']);
 
 });
