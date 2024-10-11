@@ -36,10 +36,10 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
 
     Route::apiResource('policies', PolicyController::class)->only(['index', 'update']);
 
-    Route::post('rentals/rent', [RentalController::class, 'rentBook']);
-    Route::post('rentals/{rental}/return', [RentalController::class, 'returnBook']);
+    Route::post('rentals/rent', [RentalController::class, 'rentBook'])->name('rentals.rent');
+    Route::post('rentals/{rental}/return', [RentalController::class, 'returnBook'])->name('rentals.return');
     Route::get('/rentals/{status?}', [RentalController::class, 'getBooksByStatus'])
-        ->whereIn('status', ['rented', 'returned', 'overdue']);
+        ->whereIn('status', ['rented', 'returned', 'overdue'])->name('rentals.status');
 
 });
 

@@ -16,6 +16,7 @@ class User extends Authenticatable
     use Notifiable;
     use Filterable;
 
+    public const ROLE_STUDENT = 1;
     public const ROLE_LIBRARIAN = 2;
 
     protected $fillable = [
