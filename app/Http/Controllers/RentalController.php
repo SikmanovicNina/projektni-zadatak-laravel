@@ -12,22 +12,30 @@ use Illuminate\Http\JsonResponse;
 
 class RentalController extends Controller
 {
+    /**
+     * Retrieve a list of books based on the rental status.
+     *
+     * @param $status
+     * @return JsonResponse
+     */
     public function getBooksByStatus($status = null)
     {
-        $query = Rental::query()
-            ->with(['book', 'student', 'librarian']);
+        $query = Rental::with(['book', 'student', 'librarian']);
 
         switch ($status) {
             case 'rented':
-                $query->whereNull('returned_at');
+                $query
+                    ->whereNull('returned_at');
                 break;
 
             case 'returned':
-                $query->whereNotNull('returned_at');
+                $query
+                    ->whereNotNull('returned_at');
                 break;
 
             case 'overdue':
-                $query->whereNull('returned_at')
+                $query
+                    ->whereNull('returned_at')
                     ->where('overdue_days', '>', 0);
                 break;
 
@@ -39,6 +47,12 @@ class RentalController extends Controller
         }
 
         $books = $query->get();
+
+        if (in_array($status, ['rented', 'overdue'])) {
+            $books->each(function ($rental) {
+                $rental->active_days_of_rental = $this->calculateDaysDifference($rental->rented_at);
+            });
+        }
 
         return response()->json([
             'status' => 'success',
@@ -89,13 +103,8 @@ class RentalController extends Controller
     public function returnBook(RentalRequest $request, Rental $rental)
     {
         if (!$rental->returned_at) {
-            $rentalPolicy = Policy::where('name', Policy::RENTAL_PERIOD)->first();
-            $dueDate = Carbon::parse($rental->rented_at)->addDays($rentalPolicy->period);
+            $overdueDays = $this->calculateOverdueDays($rental);
 
-            $isOverdue = now()->greaterThan($dueDate);
-            $overdueDays = $isOverdue ? now()->diffInDays($dueDate) : 0;
-
-            $rental->due_date = $dueDate;
             $rental->returned_at = now();
             $rental->overdue_days = $overdueDays;
             $rental->save();
@@ -115,4 +124,23 @@ class RentalController extends Controller
         ], 400);
     }
 
+    private function calculateOverdueDays(Rental $rental)
+    {
+        $rentalPolicy = Policy::where('name', Policy::RENTAL_PERIOD)->first();
+        $dueDate = Carbon::parse($rental->rented_at)->addDays($rentalPolicy->period);
+
+        if (now()->greaterThan($dueDate)) {
+            return $this->calculateDaysDifference($dueDate);
+        }
+
+        return 0;
+    }
+
+    private function calculateDaysDifference($startDate)
+    {
+        $from_date = Carbon::parse(date('Y-m-d', strtotime($startDate)));
+        $through_date = Carbon::parse(date('Y-m-d', strtotime(now())));
+
+        return $from_date->diffInDays($through_date);
+    }
 }
