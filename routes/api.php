@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum', LibrarianMiddleware::class])->group(function 
     Route::apiResource('books', BookController::class);
     Route::post('/books/{book}/images', [ImageController::class, 'store']);
     Route::post('/books/{book}/cover-image', [ImageController::class, 'updateCoverImage']);
+    Route::post('books/{book}/discard', [BookController::class, 'discardBook'])->name('books.discard');
 
     Route::apiResource('categories', CategoryController::class);
 
