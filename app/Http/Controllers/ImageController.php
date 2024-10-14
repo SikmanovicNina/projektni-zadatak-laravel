@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImageRequest;
 use App\Models\Book;
 use App\Models\Image;
 use Illuminate\Http\JsonResponse;
@@ -16,18 +17,8 @@ class ImageController extends Controller
      * @param Book $book
      * @return JsonResponse
      */
-    public function store(Request $request, Book $book)
+    public function store(ImageRequest $request, Book $book)
     {
-        $request->validate([
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
-        ]);
-
-        if (!$request->hasFile('image')) {
-            return response()->json([
-                'message' => 'No image uploaded',
-            ], 400);
-        }
-
         $path = $request->file('image')->store('book-images', 'public');
 
         $book->images()->create([
