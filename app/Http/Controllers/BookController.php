@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
-use App\Http\Requests\DiscardRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Discard;
 use Illuminate\Http\JsonResponse;
@@ -104,11 +103,11 @@ class BookController extends Controller
      *  The function decreases the number of available copies for the book and, if no copies are left,
      *  the book is removed from the active inventory. A record of the discarded book is kept for audit purposes.
      *
-     * @param DiscardRequest $request
+     * @param Request $request
      * @param Book $book
      * @return JsonResponse
      */
-    public function discardBook(DiscardRequest $request, Book $book)
+    public function discardBook(Request $request, Book $book)
     {
         if ($book->number_of_copies <= 0) {
             return response()->json([
@@ -118,16 +117,16 @@ class BookController extends Controller
 
         $admin = auth()->user();
 
+        Discard::create([
+            'book_id' => $book->id,
+            'admin_id' => $admin->id,
+        ]);
+
         $book->decrement('number_of_copies');
 
         if ($book->number_of_copies === 0) {
             $book->delete();
         }
-
-        Discard::create([
-            'book_id' => $book->id,
-            'admin_id' => $admin->id,
-        ]);
 
         return response()->json([
             'message' => 'Book discarded successfully.',
