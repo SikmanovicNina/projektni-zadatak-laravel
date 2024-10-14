@@ -33,7 +33,7 @@ class RentalController extends Controller
                 break;
 
             default:
-               break;
+                break;
         }
 
         if ($request->has('book_id')) {
@@ -174,4 +174,38 @@ class RentalController extends Controller
 
         return $from_date->diffInDays($through_date);
     }
+
+    /**
+     *  Get a summary of the current rental status in the library.
+     *
+     *  It returns a summary of:
+     *  - The number of books that are currently rented but not overdue.
+     *  - The number of books that are overdue based on the rental policy.
+     *
+     * @return JsonResponse
+     */
+    public function getRentalSummary()
+    {
+        $rentals = Rental::whereNull('returned_at')->get();
+
+        $rentedOverdue = 0;
+        $rentedNotOverdue = 0;
+
+        foreach ($rentals as $rental) {
+            $overdueDays = $this->calculateOverdueDays($rental);
+
+            if ($overdueDays === 0) {
+                $rentedNotOverdue++;
+            } else {
+                $rentedOverdue++;
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'rented_not_overdue' => $rentedNotOverdue,
+            'rented_overdue' => $rentedOverdue,
+        ]);
+    }
+
 }
