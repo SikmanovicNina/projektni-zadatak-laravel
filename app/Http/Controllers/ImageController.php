@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CoverImageRequest;
 use App\Http\Requests\ImageRequest;
 use App\Models\Book;
 use App\Models\Image;
@@ -39,12 +40,8 @@ class ImageController extends Controller
      * @param Book $book
      * @return JsonResponse
      */
-    public function updateCoverImage(Request $request, Book $book)
+    public function updateCoverImage(CoverImageRequest $request, Book $book)
     {
-        $request->validate([
-            'image_id' => ['required', 'exists:images,id'],
-        ]);
-
         $book->images()->update(['cover_image' => false]);
 
         $image = Image::findOrFail($request->image_id);
