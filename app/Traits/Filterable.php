@@ -9,13 +9,13 @@ trait Filterable
         $query->when(
             $filters['search'] ?? false,
             fn ($query, $search) =>
-            $query->where(
-                fn ($query) =>
-              collect($fields)->each(
-                  fn ($field) =>
-                $query->orWhere($field, 'like', '%' . $search . '%')
-              )
-            )
+                $query->where(
+                    fn ($query) =>
+                    collect($fields)->each(
+                        fn ($field) =>
+                        $query->orWhere($field, 'like', '%' . $search . '%')
+                    )
+                )
         );
 
         $query->when(
