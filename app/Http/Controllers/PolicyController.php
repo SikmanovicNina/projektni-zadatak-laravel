@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PolicyRequest;
 use App\Http\Resources\PolicyResource;
 use App\Models\Policy;
 use Illuminate\Http\JsonResponse;
@@ -32,11 +33,9 @@ class PolicyController extends Controller
      * @param Policy $policy
      * @return JsonResponse
      */
-    public function update(Request $request, Policy $policy)
+    public function update(PolicyRequest $request, Policy $policy)
     {
-        $validatedData = $request->validate([
-            'period' => ['required', 'integer', 'min:1'],
-        ]);
+        $validatedData = $request->validated();
 
         $policy->update($validatedData);
 

@@ -23,7 +23,7 @@ class ImageController extends Controller
         $path = $request->file('image')->store('book-images', 'public');
 
         $book->images()->create([
-            'path' => $path,
+            'image' => $path,
             'cover_image' => false,
         ]);
 
