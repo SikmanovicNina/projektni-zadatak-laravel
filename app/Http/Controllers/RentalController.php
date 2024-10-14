@@ -9,6 +9,7 @@ use App\Models\Policy;
 use App\Models\Rental;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RentalController extends Controller
 {
@@ -18,7 +19,7 @@ class RentalController extends Controller
      * @param $status
      * @return JsonResponse
      */
-    public function getBooksByStatus($status = null)
+    public function getBooksByStatus(Request $request, $status = null)
     {
         $query = Rental::with(['book', 'student', 'librarian']);
 
@@ -32,10 +33,15 @@ class RentalController extends Controller
                 break;
 
             default:
-                return response()->json([
-                    'status' => 'success',
-                    'data' => $query->get()
-                ]);
+               break;
+        }
+
+        if ($request->has('book_id')) {
+            $query->where('book_id', $request->get('book_id'));
+        }
+
+        if ($request->has('student_id')) {
+            $query->where('student_id', $request->get('student_id'));
         }
 
         $books = $query->get();
