@@ -16,7 +16,8 @@ class RentalController extends Controller
     /**
      * Retrieve a list of books based on the rental status.
      *
-     * @param $status
+     * @param Request $request
+     * @param null $status
      * @return JsonResponse
      */
     public function getBooksByStatus(Request $request, $status = null)
