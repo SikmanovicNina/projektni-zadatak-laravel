@@ -20,7 +20,7 @@ class RentalController extends Controller
      * @param null $status
      * @return JsonResponse
      */
-    public function getBooksByStatus($status = null)
+    public function getBooksByStatus(Request $request, $status = null)
     {
         $query = Rental::with(['book', 'student', 'librarian']);
 
@@ -38,6 +38,13 @@ class RentalController extends Controller
                 break;
         }
 
+        if ($request->has('book_id')) {
+            $query->where('book_id', $request->get('book_id'));
+        }
+
+        if ($request->has('student_id')) {
+            $query->where('student_id', $request->get('student_id'));
+        }
 
         $books = $query->get();
 
