@@ -17,7 +17,8 @@ class BookService
     public function fetchBooksByQuery($query = '')
     {
         $response = Http::get(
-            self::GOOGLE_BOOKS_API_URL, ['q' => $query]
+            self::GOOGLE_BOOKS_API_URL,
+            ['q' => $query]
         );
 
         return $response->json();

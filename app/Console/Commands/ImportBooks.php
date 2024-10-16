@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ImportBookJob;
 use App\Models\Author;
 use App\Models\Book;
 use App\Services\BookService;
@@ -35,11 +36,13 @@ class ImportBooks extends Command
      * Handle the execution of the command to import books.
      *
      * Workflow:
-     * - Generates a random letter.
-     * - Fetches books data from Google Books API.
-     * - For each book, it extracts volume information, including the ISBN.
-     * - If a valid ISBN is found, it creates or updates the book in the database.
-     * - If authors are present, it processes each author and links them to the book.
+     * - Generates a random letter (A-Z) to fetch books based on the letter.
+     * - Calls the BookService to fetch books data from the Google Books API using the generated letter.
+     * - Checks if there are valid items in the API response.
+     * - For each book item:
+     *   - Extracts the volume information, including the ISBN and authors.
+     *   - If either ISBN or authors is missing, a warning is issued and the book is skipped.
+     *   - If valid data is present, a job (ImportBookJob) is dispatched to handle the import of the book asynchronously.
      *
      * @return void
      */
@@ -51,7 +54,6 @@ class ImportBooks extends Command
 
         if (isset($booksData['items'])) {
             foreach ($booksData['items'] as $bookData) {
-
                 $volumeInfo = $bookData['volumeInfo'];
                 $isbn = $volumeInfo['industryIdentifiers'][0]['identifier'] ?? null;
                 $authors = $volumeInfo['authors'] ?? null;
@@ -61,8 +63,7 @@ class ImportBooks extends Command
                     continue;
                 }
 
-                $book = $this->createOrUpdateBook($volumeInfo, $isbn);
-                $this->processAuthors($authors, $book);
+                ImportBookJob::dispatch($volumeInfo, $isbn);
             }
         } else {
             $this->warn('No valid items found in the API response.');
