@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ImportBookJob;
-use App\Models\Author;
-use App\Models\Book;
 use App\Services\BookService;
 use Illuminate\Console\Command;
 
@@ -67,54 +65,6 @@ class ImportBooks extends Command
             }
         } else {
             $this->warn('No valid items found in the API response.');
-        }
-    }
-
-    /**
-     * Create or update a book record in the database.
-     *
-     * @param array $volumeInfo The volume information of the book from the Google Books API response.
-     * @param string $isbn
-     * @return Book
-     */
-    private function createOrUpdateBook($volumeInfo, $isbn)
-    {
-        return Book::updateOrCreate(
-            [
-                'isbn' => $isbn,
-            ],
-            [
-                'name' => $volumeInfo['title'] ?? 'Unknown Title',
-                'description' => $volumeInfo['description'] ?? null,
-                'number_of_pages' => $volumeInfo['pageCount'] ?? null,
-                'number_of_copies' => 3,
-                'language' => $volumeInfo['language'] ?? null,
-                'binding' => 'Paperback',
-                'script' => 'Latin',
-            ]
-        );
-    }
-
-
-    /**
-     * Process and attach authors to a book.
-     *
-     * @param array $authors
-     * @param Book $book
-     * @return void
-     */
-    private function processAuthors(array $authors, Book $book)
-    {
-        foreach ($authors as $authorName) {
-            $nameParts = explode(' ', trim($authorName));
-            $author = Author::firstOrCreate(
-                [
-                    'first_name' => $nameParts[0],
-                    'last_name' => $nameParts[1] ?? '',
-                ]
-            );
-
-            $book->authors()->attach($author->id);
         }
     }
 }
