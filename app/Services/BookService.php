@@ -23,4 +23,10 @@ class BookService
 
         return $response->json();
     }
+
+    public function fetchBookDetails($bookId)
+    {
+        $response = Http::get(self::GOOGLE_BOOKS_API_URL . "/{$bookId}");
+        return $response->json();
+    }
 }

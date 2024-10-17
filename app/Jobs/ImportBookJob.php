@@ -4,11 +4,13 @@ namespace App\Jobs;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Services\BookService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ImportBookJob implements ShouldQueue
 {
@@ -19,11 +21,13 @@ class ImportBookJob implements ShouldQueue
 
     protected array $volumeInfo;
     protected string $isbn;
+    protected string $bookId;
 
-    public function __construct(array $volumeInfo, string $isbn)
+    public function __construct(array $volumeInfo, string $isbn, string $id)
     {
         $this->volumeInfo = $volumeInfo;
         $this->isbn = $isbn;
+        $this->bookId = $id;
     }
 
     /**
@@ -37,13 +41,32 @@ class ImportBookJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(BookService $bookService)
     {
-        $volumeInfo = $this->volumeInfo;
-        $isbn = $this->isbn;
-        $authors = $volumeInfo['authors'] ?? [];
+        $authors = $this->volumeInfo['authors'] ?? [];
+        $book = $this->createOrUpdateBook($this->volumeInfo, $this->isbn);
+        $this->processAuthors($authors, $book);
 
-        $book = Book::updateOrCreate(
+        if ($this->bookId) {
+            $response = $bookService->fetchBookDetails($this->bookId);
+
+            if ($response) {
+                $this->handleImageLinks($response, $book);
+            }
+        }
+
+    }
+
+    /**
+     * Create or update a book record in the database.
+     *
+     * @param array $volumeInfo The volume information of the book from the Google Books API response.
+     * @param string $isbn
+     * @return Book
+     */
+    private function createOrUpdateBook($volumeInfo, $isbn)
+    {
+        return Book::updateOrCreate(
             [
                 'isbn' => $isbn,
             ],
@@ -57,7 +80,18 @@ class ImportBookJob implements ShouldQueue
                 'script' => 'Latin',
             ]
         );
+    }
 
+
+    /**
+     * Process and attach authors to a book.
+     *
+     * @param array $authors
+     * @param Book $book
+     * @return void
+     */
+    private function processAuthors(array $authors, Book $book)
+    {
         foreach ($authors as $authorName) {
             $nameParts = explode(' ', trim($authorName));
             $author = Author::firstOrCreate(
@@ -70,4 +104,26 @@ class ImportBookJob implements ShouldQueue
             $book->authors()->attach($author->id);
         }
     }
+
+    /**
+     * Handle the image links from the API response.
+     *
+     * @param array $bookData
+     * @param Book $book
+     * @return void
+     */
+    protected function handleImageLinks(array $bookData, Book $book)
+    {
+        $imageUrl = $bookData['volumeInfo']['imageLinks']['thumbnail'] ?? null;
+
+        if ($imageUrl) {
+            $book->images()->create([
+                'image' => basename($imageUrl),
+                'cover_image' => true,
+            ]);
+        } else {
+            Log::warning("No image links found for book ID:");
+        }
+    }
+
 }

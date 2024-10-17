@@ -55,13 +55,14 @@ class ImportBooks extends Command
                 $volumeInfo = $bookData['volumeInfo'];
                 $isbn = $volumeInfo['industryIdentifiers'][0]['identifier'] ?? null;
                 $authors = $volumeInfo['authors'] ?? null;
+                $bookId = $bookData['id'] ?? null;
 
-                if (!$isbn || !$authors) {
+                if (!$isbn || !$authors || !$bookId) {
                     $this->warn('Incomplete data, skipping this book.');
                     continue;
                 }
 
-                ImportBookJob::dispatch($volumeInfo, $isbn);
+                ImportBookJob::dispatch($volumeInfo, $isbn, $bookId);
             }
         } else {
             $this->warn('No valid items found in the API response.');
