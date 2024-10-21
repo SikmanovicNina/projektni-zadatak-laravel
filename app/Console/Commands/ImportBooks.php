@@ -62,6 +62,10 @@ class ImportBooks extends Command
                     continue;
                 }
 
+                /*for ($i = 0; $i < 200; $i++) {
+                    ImportBookJob::dispatch($volumeInfo, $isbn, $bookId);
+                } */
+
                 ImportBookJob::dispatch($volumeInfo, $isbn, $bookId);
             }
         } else {

@@ -11,6 +11,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class ImportBookJob implements ShouldQueue
 {
@@ -43,17 +44,22 @@ class ImportBookJob implements ShouldQueue
      */
     public function handle(BookService $bookService)
     {
-        $authors = $this->volumeInfo['authors'] ?? [];
-        $book = $this->createOrUpdateBook($this->volumeInfo, $this->isbn);
-        $this->processAuthors($authors, $book);
+        Redis::throttle('key')->block(0)->allow(10)->every(1)->then(function () use ($bookService) {
+            $authors = $this->volumeInfo['authors'] ?? [];
+            $book = $this->createOrUpdateBook($this->volumeInfo, $this->isbn);
+            $this->processAuthors($authors, $book);
 
-        if ($this->bookId) {
-            $response = $bookService->fetchBookDetails($this->bookId);
+            if ($this->bookId) {
+                $response = $bookService->fetchBookDetails($this->bookId);
 
-            if ($response) {
-                $this->handleImageLinks($response, $book);
+                if ($response) {
+                    $this->handleImageLinks($response, $book);
+                }
             }
-        }
+        }, function () {
+            return $this->release(30);
+        });
+
 
     }
 
