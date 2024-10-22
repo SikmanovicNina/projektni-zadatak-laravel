@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Author;
 use App\Models\Book;
 use App\Services\BookService;
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -19,6 +20,7 @@ class ImportBookJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
+    use Batchable;
 
     protected array $volumeInfo;
     protected string $isbn;
@@ -79,7 +81,7 @@ class ImportBookJob implements ShouldQueue
             [
                 'name' => $volumeInfo['title'] ?? 'Unknown Title',
                 'description' => $volumeInfo['description'] ?? null,
-                'number_of_pages' => $volumeInfo['pageCount'] ?? null,
+                'number_of_pages' => $volumeInfo['pageCount'] ?? 100,
                 'number_of_copies' => 3,
                 'language' => $volumeInfo['language'] ?? null,
                 'binding' => 'Paperback',

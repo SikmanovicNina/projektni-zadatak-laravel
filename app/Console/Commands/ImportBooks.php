@@ -3,8 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ImportBookJob;
+use App\Mail\BooksFetchedMail;
 use App\Services\BookService;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class ImportBooks extends Command
 {
@@ -46,9 +52,12 @@ class ImportBooks extends Command
      */
     public function handle()
     {
+        $this->info('Novi pocetak');
         $randomLetter = chr(rand(65, 90));
 
         $booksData = $this->bookService->fetchBooksByQuery($randomLetter);
+
+        $jobs = [];
 
         if (isset($booksData['items'])) {
             foreach ($booksData['items'] as $bookData) {
@@ -62,11 +71,18 @@ class ImportBooks extends Command
                     continue;
                 }
 
-                /*for ($i = 0; $i < 200; $i++) {
-                    ImportBookJob::dispatch($volumeInfo, $isbn, $bookId);
-                } */
+                $jobs[] = new ImportBookJob($volumeInfo, $isbn, $bookId);
+            }
 
-                ImportBookJob::dispatch($volumeInfo, $isbn, $bookId);
+            if (!empty($jobs)) {
+                Bus::batch($jobs)
+                    ->then(function (Batch $batch) {
+                        Mail::to("testing@gmail.me")->send(new BooksFetchedMail());
+                    })
+                    ->catch(function (Batch $batch, Throwable $e) {
+                        // Error handling callback
+                    })
+                    ->dispatch();
             }
         } else {
             $this->warn('No valid items found in the API response.');
