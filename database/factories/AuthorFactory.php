@@ -20,7 +20,7 @@ class AuthorFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'biography' => $this->faker->paragraph(),
-            'picture' => $this->faker->image(storage_path('app/public/author-pictures'), 400, 400, null, false),
+            'picture' => $this->faker->image(storage_path('app/public/author-images'), 400, 400, null, false),
         ];
     }
 }

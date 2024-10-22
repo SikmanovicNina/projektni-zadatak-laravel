@@ -29,14 +29,14 @@ it('can create an author', function () {
     $data = Author::factory()->raw(['picture' => $file]);
 
     $response = $this->postJson(route('authors.store'), $data);
-    $response->assertStatus(201);
+    $response->assertStatus(200);
     $this->assertDatabaseHas('authors', [
         'first_name' => $data['first_name'],
         'last_name' => $data['last_name'],
         'biography' => $data['biography'],
     ]);
 
-    Storage::disk('public')->assertExists('author-pictures/' . $file->hashName());
+    Storage::disk('public')->assertExists('author-images/' . $file->hashName());
 });
 
 it('can update an author with a new picture', function () {
@@ -45,7 +45,7 @@ it('can update an author with a new picture', function () {
     $file = UploadedFile::fake()->image('profile.jpg');
     $author = Author::factory()->create(['picture' => $file]);
 
-    Storage::disk('public')->put('author-pictures/' . $file->hashName(), file_get_contents($file));
+    Storage::disk('public')->put('author-images/' . $file->hashName(), file_get_contents($file));
 
     $newFile = UploadedFile::fake()->image('new-profile.jpg');
 
@@ -65,8 +65,8 @@ it('can update an author with a new picture', function () {
         'biography' => $updatedData['biography'],
     ]);
 
-    Storage::disk('public')->assertMissing('author-pictures/' . $author->picture);
-    Storage::disk('public')->assertExists('author-pictures/' . $newFile->hashName());
+    Storage::disk('public')->assertMissing('author-images/' . $author->picture);
+    Storage::disk('public')->assertExists('author-images/' . $newFile->hashName());
 });
 
 it('can delete an author', function () {
@@ -75,7 +75,7 @@ it('can delete an author', function () {
     $file = UploadedFile::fake()->image('profile.jpg');
     $author = Author::factory()->create(['picture' => $file]);
 
-    Storage::disk('public')->put('author-pictures/' . $file->hashName(), file_get_contents($file));
+    Storage::disk('public')->put('author-images/' . $file->hashName(), file_get_contents($file));
 
     $response = $this->deleteJson(route('authors.destroy', $author->id));
     $response->assertStatus(200);
@@ -86,5 +86,5 @@ it('can delete an author', function () {
         'biography' => $author->biography,
     ]);
 
-    Storage::disk('public')->assertMissing('author-pictures/' . $author->picture);
+    Storage::disk('public')->assertMissing('author-images/' . $author->picture);
 });

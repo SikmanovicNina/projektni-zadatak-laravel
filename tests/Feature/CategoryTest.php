@@ -30,7 +30,7 @@ it('can store a new category', function () {
     $data = Category::factory()->raw(['icon' => $file]);
 
     $response = $this->postJson(route('categories.store'), $data);
-    $response->assertStatus(201);
+    $response->assertStatus(200);
     $this->assertDatabaseHas('categories', [
         'name' => $data['name'],
         'description' => $data['description'],

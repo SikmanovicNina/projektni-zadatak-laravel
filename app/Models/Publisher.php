@@ -20,13 +20,19 @@ class Publisher extends Model
         'established_year',
     ];
 
+    public function scopeFilter($query, array $filters)
+    {
+        $this->applyFilters($query, $filters, ['name', 'address', 'website', 'email', 'phone_number', 'established_year']);
+    }
+
     public function authors()
     {
         return $this->belongsToMany(Author::class);
     }
 
-    public function scopeFilter($query, array $filters)
+    public function books()
     {
-        $this->applyFilters($query, $filters, ['name', 'address', 'website', 'email', 'phone_number', 'established_year']);
+        return $this->belongsToMany(Book::class);
     }
+
 }

@@ -121,7 +121,7 @@ class AuthorController extends Controller
      */
     private function setPicturePath($request)
     {
-        return $request->file('picture')->store('author-pictures', 'public');
+        return $request->file('picture')->store('author-images', 'public');
     }
 
     /**

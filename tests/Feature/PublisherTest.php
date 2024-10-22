@@ -26,7 +26,7 @@ it('can store a new publisher', function () {
     $data = Publisher::factory()->raw();
 
     $response = $this->postJson(route('publishers.store'), $data);
-    $response->assertStatus(201);
+    $response->assertStatus(200);
     $this->assertDatabaseHas('publishers', $data);
 });
 

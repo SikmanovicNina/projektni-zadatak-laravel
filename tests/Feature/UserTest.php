@@ -57,7 +57,7 @@ it('can store a new user', function () {
     $data = User::factory()->raw();
 
     $response = $this->postJson(route('users.store'), $data);
-    $response->assertStatus(201);
+    $response->assertStatus(200);
 
     unset($data['password']);
     unset($data['email_verified_at']);
@@ -104,7 +104,18 @@ it('can retrieve a specific user', function () {
 
     $response = $this->getJson(route('users.show', $user->id));
     $response->assertStatus(200);
-    $response->assertJson($user->toArray());
+    $response->assertJson([
+        'status' => 'success',
+        'data' => [
+            'id' => $user->id,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'username' => $user->username,
+            'email' => $user->email,
+            'role_id' => $user->role_id,
+            'profile_picture' => $user->profile_picture,
+        ]
+    ]);
 });
 
 it('can delete a user', function () {

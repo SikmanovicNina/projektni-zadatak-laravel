@@ -18,13 +18,19 @@ class Author extends Model
         'picture'
     ];
 
+    public function scopeFilter($query, array $filters)
+    {
+        $this->applyFilters($query, $filters, ['first_name', 'last_name']);
+    }
+
     public function publishers()
     {
         return $this->belongsToMany(Publisher::class);
     }
 
-    public function scopeFilter($query, array $filters)
+    public function books()
     {
-        $this->applyFilters($query, $filters, ['first_name', 'last_name']);
+        return $this->belongsToMany(Book::class);
     }
+
 }

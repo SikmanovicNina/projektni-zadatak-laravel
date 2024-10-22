@@ -22,4 +22,9 @@ class Category extends Model
         $this->applyFilters($query, $filters, ['name']);
     }
 
+    public function books()
+    {
+        return $this->belongsToMany(Book::class);
+    }
+
 }
