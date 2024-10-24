@@ -46,23 +46,17 @@ class ImportBookJob implements ShouldQueue
      */
     public function handle(BookService $bookService)
     {
-        Redis::throttle('key')->block(0)->allow(10)->every(1)->then(function () use ($bookService) {
-            $authors = $this->volumeInfo['authors'] ?? [];
-            $book = $this->createOrUpdateBook($this->volumeInfo, $this->isbn);
-            $this->processAuthors($authors, $book);
+        $authors = $this->volumeInfo['authors'] ?? [];
+        $book = $this->createOrUpdateBook($this->volumeInfo, $this->isbn);
+        $this->processAuthors($authors, $book);
 
-            if ($this->bookId) {
-                $response = $bookService->fetchBookDetails($this->bookId);
+        if ($this->bookId) {
+            $response = $bookService->fetchBookDetails($this->bookId);
 
-                if ($response) {
-                    $this->handleImageLinks($response, $book);
-                }
+            if ($response) {
+                $this->handleImageLinks($response, $book);
             }
-        }, function () {
-            return $this->release(30);
-        });
-
-
+        }
     }
 
     /**
