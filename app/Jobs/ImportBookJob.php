@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Services\BookService;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Redis\LimiterTimeoutException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -34,16 +35,27 @@ class ImportBookJob implements ShouldQueue
     }
 
     /**
-     * Handle the execution of the job to import a book into the database.
+     * Handles the processing of a single book by creating or updating the book record,
+     * processing its authors, and fetching additional book details if available.
      *
-     * Workflow:
-     * - Retrieves the volume information, ISBN, and authors from the job properties.
-     * - Uses the ISBN to either update an existing book record or create a new one in the database.
-     * - For each author associated with the book, it checks if the author already exists; if not, it creates a new author record.
-     * - Links the authors to the book in the database.
+     * This function:
+     * 1. Uses Redis throttling to limit the number of times this job can run, allowing
+     *    a maximum of 10 executions every 1 second, and immediately blocks if the rate limit is hit.
+     * 2. Inside the throttled block:
+     *    - Retrieves the authors from the provided `volumeInfo`.
+     *    - Calls the `createOrUpdateBook()` method to create or update the book record in the database
+     *      using the provided `volumeInfo` and `isbn`.
+     *    - Calls the `processAuthors()` method to associate the authors with the book.
+     *    - If a `bookId` is available, it fetches additional book details from the external service
+     *      using `BookService::fetchBookDetails()`.
+     *    - If the API response is successful, it processes and handles image links associated with the book.
+     * 3. If the Redis throttle fails (e.g., due to rate limits), the job is released and retried after 30 seconds.
      *
+     * @param BookService $bookService The service used to fetch additional book details.
      * @return void
+     * @throws LimiterTimeoutException
      */
+
     public function handle(BookService $bookService)
     {
         Redis::throttle('key')->block(0)->allow(10)->every(1)->then(function () use ($bookService) {
