@@ -25,7 +25,7 @@ class BookController extends Controller
             $perPage = 20;
         }
 
-        $books = Book::filter($request->only(['search']))->paginate($perPage);
+        $books = Book::with('images', 'genres', 'categories')->filter($request->only(['search']))->paginate($perPage);
 
         return response()->json([
             'status' => 'success',
