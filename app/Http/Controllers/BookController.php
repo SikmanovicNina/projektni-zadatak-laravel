@@ -20,12 +20,14 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 20);
+        $relations = ['images', 'genres', 'categories', 'authors'];
+
 
         if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
             $perPage = 20;
         }
 
-        $books = Book::with('images', 'genres', 'categories')->filter($request->only(['search']))->paginate($perPage);
+        $books = Book::with($relations)->filter($request->only(['search']))->paginate($perPage);
 
         return response()->json([
             'status' => 'success',
@@ -44,6 +46,11 @@ class BookController extends Controller
         $validatedData = $request->validated();
 
         $book = Book::create($validatedData);
+
+        $book->categories()->attach($request->input('categories', []));
+        $book->genres()->attach($request->input('genres', []));
+        $book->authors()->attach($request->input('authors', []));
+        $book->publishers()->attach($request->input('publishers', []));
 
         return response()->json([
             'status' => 'success',
@@ -77,6 +84,11 @@ class BookController extends Controller
         $validatedData = $request->validated();
 
         $book->update($validatedData);
+
+        $book->categories()->sync($request->input('categories', []));
+        $book->genres()->sync($request->input('genres', []));
+        $book->authors()->sync($request->input('authors', []));
+        $book->publishers()->sync($request->input('publishers', []));
 
         return response()->json([
             'status' => 'success',

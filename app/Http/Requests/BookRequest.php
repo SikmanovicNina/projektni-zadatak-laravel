@@ -32,6 +32,14 @@ class BookRequest extends FormRequest
             'binding' => ['required', 'string', Rule::in(Book::BINDINGS)],
             'script' => ['required', 'string', Rule::in(Book::SCRIPTS)],
             'dimensions' => ['required', 'string', Rule::in(Book::DIMENSIONS)],
+            'categories' => ['array'],
+            'categories.*' => ['integer', 'exists:categories,id'],
+            'genres' => ['array'],
+            'genres.*' => ['integer', 'exists:genres,id'],
+            'authors' => ['array'],
+            'authors.*' => ['integer', 'exists:authors,id'],
+            'publishers' => ['array'],
+            'publishers.*' => ['integer', 'exists:publishers,id'],
         ];
 
     }

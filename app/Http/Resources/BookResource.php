@@ -25,8 +25,10 @@ class BookResource extends JsonResource
             'script' => $this->script,
             'binding' => $this->binding,
             'dimensions' => $this->dimensions,
-            'images'=> $this->images,
-            'categories'=> $this->categories,
+            'images' => $this->images,
+            'categories' => $this->categories,
+            'publishers' => $this->publishers,
+            'authors' => $this->authors,
             'genres' => $this->genres
         ];
     }
