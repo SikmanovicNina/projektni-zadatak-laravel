@@ -19,7 +19,11 @@ class GenreController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 20);
+
+        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
 
         $genres = Genre::filter($request->only(['search']))->paginate($perPage);
 
