@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GenreRequest;
 use App\Http\Resources\GenreResource;
+use App\Http\Resources\ResponseCollection;
 use App\Models\Genre;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class GenreController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => GenreResource::collection($genres)
+            'data' => new ResponseCollection($genres, GenreResource::class)
         ]);
     }
 

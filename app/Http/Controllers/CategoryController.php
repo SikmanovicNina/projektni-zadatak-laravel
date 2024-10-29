@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ResponseCollection;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => CategoryResource::collection($categories)
+            'data' => new ResponseCollection($categories, CategoryResource::class)
         ]);
     }
 

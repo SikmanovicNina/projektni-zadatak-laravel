@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
+use App\Http\Resources\ResponseCollection;
 use App\Models\Discard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class BookController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => BookResource::collection($books)
+            'data' => new ResponseCollection($books, BookResource::class)
         ]);
     }
 

@@ -20,7 +20,7 @@ class BookRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'number_of_pages' => ['required', 'integer', 'min:1', 'max:20000'],
+            'number_of_pages' => ['required', 'integer', 'min:1', 'max:2000'],
             'number_of_copies' => ['required', 'integer', 'min:1'],
             'isbn' => [
                 'required',
