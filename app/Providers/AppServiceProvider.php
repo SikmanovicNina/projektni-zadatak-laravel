@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Carbon::macro('calculateDaysDifference', function () {
-            $from_date = Carbon::parse(date('Y-m-d', strtotime($this)));
+            $from_date = Carbon::parse($this->format('Y-m-d'));
             $through_date = Carbon::parse(date('Y-m-d', strtotime(now())));
 
             return $from_date->diffInDays($through_date);
