@@ -7,14 +7,13 @@ use App\Http\Requests\ImageRequest;
 use App\Models\Book;
 use App\Models\Image;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
     /**
      * Store image for a specific book.
      *
-     * @param Request $request
+     * @param ImageRequest $request
      * @param Book $book
      * @return JsonResponse
      */
@@ -36,7 +35,7 @@ class ImageController extends Controller
     /**
      * Update the cover image for the specified book by image ID.
      *
-     * @param Request $request
+     * @param CoverImageRequest $request
      * @param Book $book
      * @return JsonResponse
      */
