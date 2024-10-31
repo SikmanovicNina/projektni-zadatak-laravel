@@ -11,7 +11,6 @@ class AuthController extends Controller
 {
     public function __construct(protected AuthService $authService)
     {
-        $this->authService = $authService;
     }
 
     /**
