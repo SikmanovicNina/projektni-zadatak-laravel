@@ -7,7 +7,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ResponseCollection extends ResourceCollection
 {
-
     protected $resourceClass;
 
     public function __construct($resource, $resourceClass)
