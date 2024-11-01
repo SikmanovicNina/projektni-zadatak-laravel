@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PolicyRequest;
 use App\Http\Resources\PolicyResource;
 use App\Models\Policy;
+use App\Services\PolicyService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class PolicyController extends Controller
 {
+    public function __construct(protected PolicyService $policyService)
+    {
+    }
+
     /**
      *  Display a listing of the resource.
      *
@@ -17,7 +21,7 @@ class PolicyController extends Controller
      */
     public function index()
     {
-        $policies = Policy::all();
+        $policies = $this->policyService->getAllPolicies();
 
         return response()->json([
             'status' => 'success',
@@ -29,7 +33,7 @@ class PolicyController extends Controller
     /**
      *  Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param PolicyRequest $request
      * @param Policy $policy
      * @return JsonResponse
      */
@@ -37,7 +41,7 @@ class PolicyController extends Controller
     {
         $validatedData = $request->validated();
 
-        $policy->update($validatedData);
+        $policy = $this->policyService->updatePolicy($policy, $validatedData);
 
         return response()->json([
             'status' => 'success',
