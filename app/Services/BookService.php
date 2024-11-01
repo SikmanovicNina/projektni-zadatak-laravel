@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Book;
 use App\Models\Discard;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class BookService
@@ -17,32 +16,35 @@ class BookService
     /**
      * Get a paginated list of books with optional filtering and relationships.
      *
-     * @param Request $request
+     * @param array $filters
      * @param int $perPage
      * @return mixed
      */
-    public function getAllBooks(Request $request, int $perPage)
+    public function getAllBooks(array $filters, int $perPage)
     {
         return Book::with($this->relations)
-                        ->filter($request->only(['search']))
-                        ->paginate($perPage);
+            ->filter($filters)
+            ->paginate($perPage);
     }
 
     /**
      * Create a new book entry in the database with associated relationships.
      *
      * @param array $data
-     * @param Request $request
+     * @param array $categories
+     * @param array $genres
+     * @param array $authors
+     * @param array $publishers
      * @return Book
      */
-    public function createBook(array $data, Request $request)
+    public function createBook(array $data, array $categories, array $genres, array $authors, array $publishers)
     {
         $book = Book::create($data);
 
-        $book->categories()->attach($request->input('categories', []));
-        $book->genres()->attach($request->input('genres', []));
-        $book->authors()->attach($request->input('authors', []));
-        $book->publishers()->attach($request->input('publishers', []));
+        $book->categories()->attach($categories);
+        $book->genres()->attach($genres);
+        $book->authors()->attach($authors);
+        $book->publishers()->attach($publishers);
 
         return $book;
     }
@@ -52,17 +54,20 @@ class BookService
      *
      * @param Book $book
      * @param array $data
-     * @param Request $request
+     * @param array $categories
+     * @param array $genres
+     * @param array $authors
+     * @param array $publishers
      * @return Book
      */
-    public function updateBook(Book $book, array $data, Request $request)
+    public function updateBook(Book $book, array $data, array $categories, array $genres, array $authors, array $publishers)
     {
         $book->update($data);
 
-        $book->categories()->sync($request->input('categories', []));
-        $book->genres()->sync($request->input('genres', []));
-        $book->authors()->sync($request->input('authors', []));
-        $book->publishers()->sync($request->input('publishers', []));
+        $book->categories()->sync($categories);
+        $book->genres()->sync($genres);
+        $book->authors()->sync($authors);
+        $book->publishers()->sync($publishers);
 
         return $book;
     }
@@ -71,16 +76,10 @@ class BookService
      * Discard a book from the inventory by reducing its available copies and deleting if none remain.
      *
      * @param Book $book
-     * @return JsonResponse|void
+     * @return void
      */
     public function discardBook(Book $book)
     {
-        if ($book->number_of_copies <= 0) {
-            return response()->json([
-                'error' => 'This book cannot be discarded as it does not exist in the inventory.',
-            ], 400);
-        }
-
         $admin = auth()->user();
 
         Discard::create([
@@ -121,5 +120,10 @@ class BookService
     {
         $response = Http::get(self::GOOGLE_BOOKS_API_URL . "/{$bookId}");
         return $response->json();
+    }
+
+    public function deleteBook(Book $book)
+    {
+        $book->delete();
     }
 }

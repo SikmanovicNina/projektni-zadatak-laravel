@@ -27,8 +27,9 @@ class BookController extends Controller
         $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
             ? $request->input('per_page', 20)
             : 20;
+        $filters = $request->only(['search']);
 
-        $books = $this->bookService->getAllBooks($request, $perPage);
+        $books = $this->bookService->getAllBooks($filters, $perPage);
 
         return response()->json([
             'status' => 'success',
@@ -44,7 +45,13 @@ class BookController extends Controller
      */
     public function store(BookRequest $request)
     {
-        $book = $this->bookService->createBook($request->validated(), $request);
+        $book = $this->bookService->createBook(
+            $request->validated(),
+            $request->input('categories', []),
+            $request->input('genres', []),
+            $request->input('authors', []),
+            $request->input('publishers', [])
+        );
 
         return response()->json([
             'status' => 'success',
@@ -75,7 +82,14 @@ class BookController extends Controller
      */
     public function update(BookRequest $request, Book $book)
     {
-        $book = $this->bookService->updateBook($book, $request->validated(), $request);
+        $book = $this->bookService->updateBook(
+            $book,
+            $request->validated(),
+            $request->input('categories', []),
+            $request->input('genres', []),
+            $request->input('authors', []),
+            $request->input('publishers', [])
+        );
 
         return response()->json([
             'status' => 'success',
@@ -91,7 +105,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        $book->delete();
+        $this->bookService->deleteBook($book);
 
         return response()->json(['message' => 'Book deleted successfully.'], 200);
     }
@@ -104,6 +118,11 @@ class BookController extends Controller
      */
     public function discardBook(Book $book)
     {
+        if ($book->number_of_copies <= 0) {
+            return response()->json([
+                'error' => 'This book cannot be discarded as it does not exist in the inventory.',
+            ], 400);
+        }
 
         $this->bookService->discardBook($book);
 
