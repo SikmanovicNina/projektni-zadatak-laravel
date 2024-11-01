@@ -7,12 +7,25 @@ use App\Models\User;
 
 class UserService
 {
-    public function getAllUsers($filters, $perPage)
+    /**
+     * Get all users with pagination and filtering.
+     *
+     * @param array $filters
+     * @param int $perPage
+     * @return mixed
+     */
+    public function getAllUsers(array $filters, int $perPage)
     {
         return User::latest()->filter($filters)->paginate($perPage);
     }
 
-    public function createUser(array $data)
+    /**
+     * Create a new user.
+     *
+     * @param array $data
+     * @return User
+     */
+    public function createUser(array $data): User
     {
         $user = User::create($data);
 
@@ -23,18 +36,38 @@ class UserService
         return $user;
     }
 
-    public function updateUser(User $user, array $data)
+    /**
+     * Update an existing user.
+     *
+     * @param User $user
+     * @param array $data
+     * @return User
+     */
+    public function updateUser(User $user, array $data): User
     {
         $user->update($data);
         return $user;
     }
 
-    public function deleteUser(User $user)
+    /**
+     * Delete a user.
+     *
+     * @param User $user
+     * @return void
+     */
+    public function deleteUser(User $user): void
     {
-        return $user->delete();
+        $user->delete();
     }
 
-    public function uploadProfilePicture(User $user, $picture)
+    /**
+     * Upload the user's profile picture.
+     *
+     * @param User $user
+     * @param $picture
+     * @return string
+     */
+    public function uploadProfilePicture(User $user, $picture): string
     {
         $path = $picture->store('user-images', 'public');
         $user->profile_picture = $path;

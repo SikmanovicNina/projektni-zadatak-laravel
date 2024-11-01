@@ -27,7 +27,6 @@ class UserController extends Controller
         $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
             ? $request->input('per_page', 20)
             : 20;
-
         $filters = $request->only(['search', 'role_id']);
 
         $users = $this->userService->getAllUsers($filters, $perPage);
@@ -47,6 +46,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $validatedData = $request->validated();
+
         $user = $this->userService->createUser($validatedData);
 
         return response()->json([
@@ -79,6 +79,7 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         $validatedData = $request->validated();
+
         $user = $this->userService->updateUser($user, $validatedData);
 
         return response()->json([
@@ -112,8 +113,9 @@ class UserController extends Controller
         $request->validate([
             'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
+        $picture = $request->file('picture');
 
-        $path = $this->userService->uploadProfilePicture($user, $request->file('picture'));
+        $path = $this->userService->uploadProfilePicture($user, $picture);
 
         return response()->json([
             'message' => 'Picture uploaded successfully',
