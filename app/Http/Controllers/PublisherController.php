@@ -6,30 +6,34 @@ use App\Http\Requests\PublisherRequest;
 use App\Http\Resources\PublisherResource;
 use App\Http\Resources\ResponseCollection;
 use App\Models\Publisher;
+use App\Services\PublisherService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
+    public function __construct(protected PublisherService $publisherService)
+    {
+    }
+
     /**
-     *  Display a listing of the resource.
+     * Display a listing of the resource.
      *
      * @param Request $request
      * @return JsonResponse
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 20);
+        $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
+            ? $request->input('per_page', 20)
+            : 20;
 
-        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
-            $perPage = 20;
-        }
-
-        $authors = Publisher::filter($request->only(['search']))->paginate($perPage);
+        $filters = $request->only(['search']);
+        $publishers = $this->publisherService->getAllPublishers($filters, $perPage);
 
         return response()->json([
             'status' => 'success',
-            'data' => new ResponseCollection($authors, PublisherResource::class)
+            'data' => new ResponseCollection($publishers, PublisherResource::class)
         ]);
     }
 
@@ -43,7 +47,7 @@ class PublisherController extends Controller
     {
         $validatedData = $request->validated();
 
-        $publisher = Publisher::create($validatedData);
+        $publisher = $this->publisherService->createPublisher($validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -76,7 +80,7 @@ class PublisherController extends Controller
     {
         $validatedData = $request->validated();
 
-        $publisher->update($validatedData);
+        $publisher = $this->publisherService->updatePublisher($publisher, $validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -92,7 +96,7 @@ class PublisherController extends Controller
      */
     public function destroy(Publisher $publisher)
     {
-        $publisher->delete();
+        $this->publisherService->deletePublisher($publisher);
 
         return response()->json(['message' => 'Publisher deleted successfully.'], 200);
     }
