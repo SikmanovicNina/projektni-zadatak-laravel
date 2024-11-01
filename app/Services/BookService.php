@@ -35,7 +35,7 @@ class BookService
      * @param Request $request
      * @return Book
      */
-    public function createBook(array $data, Request $request): Book
+    public function createBook(array $data, Request $request)
     {
         $book = Book::create($data);
 
@@ -55,7 +55,7 @@ class BookService
      * @param Request $request
      * @return Book
      */
-    public function updateBook(Book $book, array $data, Request $request): Book
+    public function updateBook(Book $book, array $data, Request $request)
     {
         $book->update($data);
 

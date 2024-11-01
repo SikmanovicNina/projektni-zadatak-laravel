@@ -31,11 +31,13 @@ class AuthorController extends Controller
             ? $request->input('per_page', 20)
             : 20;
 
-        $authors = $this->authorService->getAllAuthors($request, $perPage);
+        $filters = $request->only(['search']);
+
+        $authors = $this->authorService->getAllAuthors($filters, $perPage);
 
         return response()->json([
             'status' => 'success',
-            'data' => new ResponseCollection($authors, AuthorResource::class)
+            'data' => new ResponseCollection($authors, AuthorResource::class),
         ]);
     }
 

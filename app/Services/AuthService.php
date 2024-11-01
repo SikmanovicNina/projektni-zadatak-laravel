@@ -14,7 +14,7 @@ class AuthService
      * @param string $password
      * @return string|null
      */
-    public function login(string $email, string $password): ?string
+    public function login(string $email, string $password)
     {
         $user = User::where('email', $email)->first();
 
@@ -31,7 +31,7 @@ class AuthService
      * @param User $user
      * @return void
      */
-    public function logout(User $user): void
+    public function logout(User $user)
     {
         $user->tokens()->delete();
     }

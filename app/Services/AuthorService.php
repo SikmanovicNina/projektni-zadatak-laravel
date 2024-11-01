@@ -8,19 +8,42 @@ use Illuminate\Support\Facades\Storage;
 
 class AuthorService
 {
-    public function getAllAuthors(Request $request, $perPage = 20)
+    /**
+     * Get all authors with pagination and filtering.
+     *
+     * @param array $filters
+     * @param int $perPage
+     * @return mixed
+     */
+    public function getAllAuthors(array $filters, int $perPage = 20)
     {
-        return Author::filter($request->only(['search']))->paginate($perPage);
+        return Author::filter($filters)->paginate($perPage);
     }
 
+    /**
+     * Create a new author with optional picture upload.
+     *
+     * @param array $data
+     * @param Request $request
+     * @return Author
+     */
     public function createAuthor(array $data, Request $request)
     {
         if ($request->hasFile('picture')) {
             $data['picture'] = $this->storePicture($request);
         }
+
         return Author::create($data);
     }
 
+    /**
+     * Update an existing author with optional picture replacement.
+     *
+     * @param Author $author
+     * @param array $data
+     * @param Request $request
+     * @return Author
+     */
     public function updateAuthor(Author $author, array $data, Request $request)
     {
         if ($request->hasFile('picture')) {
@@ -29,10 +52,17 @@ class AuthorService
             }
             $data['picture'] = $this->storePicture($request);
         }
+
         $author->update($data);
         return $author;
     }
 
+    /**
+     * Delete an author and their associated picture.
+     *
+     * @param Author $author
+     * @return void
+     */
     public function deleteAuthor(Author $author)
     {
         if ($author->picture) {
@@ -41,12 +71,24 @@ class AuthorService
         $author->delete();
     }
 
+    /**
+     * Store the picture file and return its path.
+     *
+     * @param Request $request
+     * @return string
+     */
     private function storePicture(Request $request)
     {
         return $request->file('picture')->store('author-images', 'public');
     }
 
-    private function deletePicture($picturePath)
+    /**
+     * Delete the picture file from storage.
+     *
+     * @param string $picturePath
+     * @return void
+     */
+    private function deletePicture(string $picturePath)
     {
         Storage::disk('public')->delete($picturePath);
     }

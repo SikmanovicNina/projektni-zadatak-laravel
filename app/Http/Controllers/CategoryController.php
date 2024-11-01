@@ -7,7 +7,6 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ResponseCollection;
 use App\Models\Category;
 use App\Services\CategoryService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -19,7 +18,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
         $filters = $request->only(['search']);
         $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
@@ -37,7 +36,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryRequest $request): JsonResponse
+    public function store(CategoryRequest $request)
     {
         $validatedData = $request->validated();
         $icon = $request->file('icon');
@@ -53,7 +52,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category): JsonResponse
+    public function show(Category $category)
     {
         return response()->json([
             'status' => 'success',
@@ -64,7 +63,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryRequest $request, Category $category): JsonResponse
+    public function update(CategoryRequest $request, Category $category)
     {
         $validatedData = $request->validated();
         $icon = $request->file('icon');
@@ -80,7 +79,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category): JsonResponse
+    public function destroy(Category $category)
     {
         $this->categoryService->deleteCategory($category);
 

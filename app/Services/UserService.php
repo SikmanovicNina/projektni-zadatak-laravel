@@ -25,7 +25,7 @@ class UserService
      * @param array $data
      * @return User
      */
-    public function createUser(array $data): User
+    public function createUser(array $data)
     {
         $user = User::create($data);
 
@@ -43,7 +43,7 @@ class UserService
      * @param array $data
      * @return User
      */
-    public function updateUser(User $user, array $data): User
+    public function updateUser(User $user, array $data)
     {
         $user->update($data);
         return $user;
@@ -55,7 +55,7 @@ class UserService
      * @param User $user
      * @return void
      */
-    public function deleteUser(User $user): void
+    public function deleteUser(User $user)
     {
         $user->delete();
     }
@@ -67,7 +67,7 @@ class UserService
      * @param $picture
      * @return string
      */
-    public function uploadProfilePicture(User $user, $picture): string
+    public function uploadProfilePicture(User $user, $picture)
     {
         $path = $picture->store('user-images', 'public');
         $user->profile_picture = $path;
