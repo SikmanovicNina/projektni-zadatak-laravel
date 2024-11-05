@@ -58,7 +58,7 @@ class ImportBookJob implements ShouldQueue
 
     public function handle(BookService $bookService)
     {
-        Redis::throttle('key')->block(0)->allow(10)->every(1)->then(function () use ($bookService) {
+        Redis::throttle('api-fetch-book-details')->block(0)->allow(10)->every(1)->then(function () use ($bookService) {
             $authors = $this->volumeInfo['authors'] ?? [];
             $book = $this->createOrUpdateBook($this->volumeInfo, $this->isbn);
             $this->processAuthors($authors, $book);
@@ -91,8 +91,8 @@ class ImportBookJob implements ShouldQueue
             [
                 'name' => $volumeInfo['title'] ?? 'Unknown Title',
                 'description' => $volumeInfo['description'] ?? null,
-                'number_of_pages' => $volumeInfo['pageCount'] ?? 100,
-                'number_of_copies' => 3,
+                'number_of_pages' => $volumeInfo['pageCount'] ?? null,
+                'number_of_copies' =>  null,
                 'language' => $volumeInfo['language'] ?? null,
                 'binding' => 'Paperback',
                 'script' => 'Latin',
@@ -115,7 +115,7 @@ class ImportBookJob implements ShouldQueue
             $author = Author::firstOrCreate(
                 [
                     'first_name' => $nameParts[0],
-                    'last_name' => $nameParts[1] ?? '',
+                    'last_name' => $nameParts[1] ?? null,
                 ]
             );
 

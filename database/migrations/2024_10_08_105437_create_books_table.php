@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('number_of_pages');
+            $table->integer('number_of_pages')->nullable();
             $table->integer('number_of_copies');
             $table->string('isbn')->unique();
             $table->string('language');
