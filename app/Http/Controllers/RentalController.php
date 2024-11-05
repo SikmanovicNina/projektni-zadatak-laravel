@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RentalRequest;
 use App\Http\Resources\RentalResource;
+use App\Http\Resources\RentedBooksResource;
+use App\Http\Resources\ResponseCollection;
 use App\Models\Book;
 use App\Models\Policy;
 use App\Models\Rental;
@@ -22,6 +24,12 @@ class RentalController extends Controller
      */
     public function getBooksByStatus(Request $request, $status = null)
     {
+        $perPage = $request->input('per_page', 20);
+
+        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
+
         $query = Rental::with(['book', 'student', 'librarian']);
 
         switch ($status) {
@@ -46,10 +54,10 @@ class RentalController extends Controller
             $query->where('student_id', $request->get('student_id'));
         }
 
-        $books = $query->get();
+        $books = $query->paginate($perPage);
 
         if ($status === 'overdue') {
-            $books = $books->filter(function ($rental) {
+            $filteredCollection = $books->getCollection()->filter(function ($rental) {
                 $overdueDays = $this->calculateOverdueDays($rental);
 
                 if ($overdueDays > 0) {
@@ -59,6 +67,8 @@ class RentalController extends Controller
 
                 return false;
             });
+
+            $books->setCollection($filteredCollection);
         }
 
         if (in_array($status, ['rented', 'overdue'])) {
@@ -69,7 +79,7 @@ class RentalController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $books,
+            'data' => new ResponseCollection($books, RentedBooksResource::class)
         ]);
     }
 

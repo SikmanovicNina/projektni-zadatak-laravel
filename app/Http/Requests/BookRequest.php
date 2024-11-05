@@ -20,8 +20,8 @@ class BookRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'number_of_pages' => ['required', 'integer', 'min:1'],
-            'number_of_copies' => ['required', 'integer'],
+            'number_of_pages' => ['required', 'integer', 'min:1', 'max:2000'],
+            'number_of_copies' => ['required', 'integer', 'min:1'],
             'isbn' => [
                 'required',
                 'string',
@@ -32,6 +32,14 @@ class BookRequest extends FormRequest
             'binding' => ['required', 'string', Rule::in(Book::BINDINGS)],
             'script' => ['required', 'string', Rule::in(Book::SCRIPTS)],
             'dimensions' => ['required', 'string', Rule::in(Book::DIMENSIONS)],
+            'categories' => ['array'],
+            'categories.*' => ['integer', 'exists:categories,id'],
+            'genres' => ['array'],
+            'genres.*' => ['integer', 'exists:genres,id'],
+            'authors' => ['array'],
+            'authors.*' => ['integer', 'exists:authors,id'],
+            'publishers' => ['array'],
+            'publishers.*' => ['integer', 'exists:publishers,id'],
         ];
 
     }

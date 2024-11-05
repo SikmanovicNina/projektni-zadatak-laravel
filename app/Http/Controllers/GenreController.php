@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GenreRequest;
 use App\Http\Resources\GenreResource;
+use App\Http\Resources\ResponseCollection;
 use App\Models\Genre;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,13 +19,17 @@ class GenreController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 20);
+
+        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
+            $perPage = 20;
+        }
 
         $genres = Genre::filter($request->only(['search']))->paginate($perPage);
 
         return response()->json([
             'status' => 'success',
-            'data' => GenreResource::collection($genres)
+            'data' => new ResponseCollection($genres, GenreResource::class)
         ]);
     }
 

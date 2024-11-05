@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PublisherRequest;
 use App\Http\Resources\PublisherResource;
+use App\Http\Resources\ResponseCollection;
 use App\Models\Publisher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class PublisherController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => PublisherResource::collection($authors)
+            'data' => new ResponseCollection($authors, PublisherResource::class)
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PasswordResetRequested;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\ResponseCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -32,7 +33,7 @@ class UserController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => UserResource::collection($users)
+            'data' => new ResponseCollection($users, UserResource::class)
         ]);
     }
 
@@ -103,10 +104,7 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'data' => new UserResource($user)
-        ]);
+        return response()->json(['message' => 'User deleted successfully.']);
     }
 
     /**

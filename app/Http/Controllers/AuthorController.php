@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthorRequest;
 use App\Http\Resources\AuthorResource;
+use App\Http\Resources\ResponseCollection;
 use App\Models\Author;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class AuthorController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => AuthorResource::collection($authors)
+            'data' => new ResponseCollection($authors, AuthorResource::class)
         ]);
     }
 
