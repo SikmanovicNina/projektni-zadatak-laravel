@@ -27,7 +27,9 @@ class RentalController extends Controller
      */
     public function getBooksByStatus(Request $request, $status = null)
     {
-        $perPage = $request->input('per_page', 20);
+        $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
+            ? $request->input('per_page', 20)
+            : 20;
         $filters = $request->only(['book_id', 'student_id']);
 
         $books = $this->rentalService->getBooksByStatus($filters, $status, $perPage);

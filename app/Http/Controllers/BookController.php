@@ -27,7 +27,6 @@ class BookController extends Controller
         $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
             ? $request->input('per_page', 20)
             : 20;
-
         $filters = ['search' => $request->get('search')];
 
         $books = $this->bookService->getAllBooks($filters, $perPage);
