@@ -107,7 +107,7 @@ class BookController extends Controller
     {
         $this->bookService->deleteBook($book);
 
-        return response()->json(['message' => 'Book deleted successfully.'], 200);
+        return response()->json(['message' => 'Book deleted successfully.']);
     }
 
     /**

@@ -98,6 +98,6 @@ class PublisherController extends Controller
     {
         $this->publisherService->deletePublisher($publisher);
 
-        return response()->json(['message' => 'Publisher deleted successfully.'], 200);
+        return response()->json(['message' => 'Publisher deleted successfully.']);
     }
 }
