@@ -94,8 +94,8 @@ class ImportBookJob implements ShouldQueue
                 'number_of_pages' => $volumeInfo['pageCount'] ?? null,
                 'number_of_copies' =>  null,
                 'language' => $volumeInfo['language'] ?? null,
-                'binding' => 'Paperback',
-                'script' => 'Latin',
+                'binding' => null,
+                'script' => null,
             ]
         );
     }
