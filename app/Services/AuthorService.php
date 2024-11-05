@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Author;
-use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class AuthorService
@@ -24,13 +24,13 @@ class AuthorService
      * Create a new author with optional picture upload.
      *
      * @param array $data
-     * @param Request $request
+     * @param UploadedFile|null $picture
      * @return Author
      */
-    public function createAuthor(array $data, Request $request)
+    public function createAuthor(array $data, ?UploadedFile $picture = null)
     {
-        if ($request->hasFile('picture')) {
-            $data['picture'] = $this->storePicture($request);
+        if ($picture) {
+            $data['picture'] = $this->storePicture($picture);
         }
 
         return Author::create($data);
@@ -41,16 +41,16 @@ class AuthorService
      *
      * @param Author $author
      * @param array $data
-     * @param Request $request
+     * @param UploadedFile|null $picture
      * @return Author
      */
-    public function updateAuthor(Author $author, array $data, Request $request)
+    public function updateAuthor(Author $author, array $data, ?UploadedFile $picture = null)
     {
-        if ($request->hasFile('picture')) {
+        if ($picture) {
             if ($author->picture) {
                 $this->deletePicture($author->picture);
             }
-            $data['picture'] = $this->storePicture($request);
+            $data['picture'] = $this->storePicture($picture);
         }
 
         $author->update($data);
@@ -74,12 +74,12 @@ class AuthorService
     /**
      * Store the picture file and return its path.
      *
-     * @param Request $request
+     * @param UploadedFile $picture
      * @return string
      */
-    private function storePicture(Request $request)
+    private function storePicture(UploadedFile $picture)
     {
-        return $request->file('picture')->store('author-images', 'public');
+        return $picture->store('author-images', 'public');
     }
 
     /**

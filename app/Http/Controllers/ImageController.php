@@ -42,7 +42,6 @@ class ImageController extends Controller
     public function updateCoverImage(CoverImageRequest $request, Book $book)
     {
         $imageId = $request->image_id;
-
         $image = $this->imageService->updateCoverImage($book, $imageId);
 
         return response()->json([

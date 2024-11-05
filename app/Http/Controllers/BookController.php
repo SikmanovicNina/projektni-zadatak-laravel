@@ -27,7 +27,8 @@ class BookController extends Controller
         $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
             ? $request->input('per_page', 20)
             : 20;
-        $filters = $request->only(['search']);
+
+        $filters = ['search' => $request->get('search')];
 
         $books = $this->bookService->getAllBooks($filters, $perPage);
 
@@ -46,11 +47,7 @@ class BookController extends Controller
     public function store(BookRequest $request)
     {
         $book = $this->bookService->createBook(
-            $request->validated(),
-            $request->input('categories', []),
-            $request->input('genres', []),
-            $request->input('authors', []),
-            $request->input('publishers', [])
+            $request->validated()
         );
 
         return response()->json([
@@ -84,11 +81,7 @@ class BookController extends Controller
     {
         $book = $this->bookService->updateBook(
             $book,
-            $request->validated(),
-            $request->input('categories', []),
-            $request->input('genres', []),
-            $request->input('authors', []),
-            $request->input('publishers', [])
+            $request->validated()
         );
 
         return response()->json([

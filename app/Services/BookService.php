@@ -21,29 +21,19 @@ class BookService
      */
     public function getAllBooks(array $filters, int $perPage)
     {
-        return Book::with($this->relations)
-            ->filter($filters)
-            ->paginate($perPage);
+        return Book::with($this->relations)->filter($filters)->paginate($perPage);
     }
 
     /**
      * Create a new book entry in the database with associated relationships.
      *
      * @param array $data
-     * @param array $categories
-     * @param array $genres
-     * @param array $authors
-     * @param array $publishers
      * @return Book
      */
-    public function createBook(array $data, array $categories, array $genres, array $authors, array $publishers)
+    public function createBook(array $data)
     {
         $book = Book::create($data);
-
-        $book->categories()->attach($categories);
-        $book->genres()->attach($genres);
-        $book->authors()->attach($authors);
-        $book->publishers()->attach($publishers);
+        $this->syncBookRelations($book, $data);
 
         return $book;
     }
@@ -53,22 +43,29 @@ class BookService
      *
      * @param Book $book
      * @param array $data
-     * @param array $categories
-     * @param array $genres
-     * @param array $authors
-     * @param array $publishers
      * @return Book
      */
-    public function updateBook(Book $book, array $data, array $categories, array $genres, array $authors, array $publishers)
+    public function updateBook(Book $book, array $data)
     {
         $book->update($data);
-
-        $book->categories()->sync($categories);
-        $book->genres()->sync($genres);
-        $book->authors()->sync($authors);
-        $book->publishers()->sync($publishers);
+        $this->syncBookRelations($book, $data);
 
         return $book;
+    }
+
+    /**
+     * Sync book relationships (publishers, categories, genres, authors).
+     *
+     * @param Book $book
+     * @param array $data
+     * @return void
+     */
+    private function syncBookRelations(Book $book, array $data)
+    {
+        $book->publishers()->sync($data['publishers'] ?? []);
+        $book->categories()->sync($data['categories'] ?? []);
+        $book->genres()->sync($data['genres'] ?? []);
+        $book->authors()->sync($data['authors'] ?? []);
     }
 
     /**

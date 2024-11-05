@@ -20,13 +20,6 @@ class PasswordResetService
     public function sendResetLink(string $email)
     {
         $user = User::where('email', $email)->first();
-
-        if (!$user) {
-            throw ValidationException::withMessages([
-                'email' => ['We can\'t find a user with that email address.'],
-            ]);
-        }
-
         event(new PasswordResetRequested($user));
     }
 

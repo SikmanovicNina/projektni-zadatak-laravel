@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-
     public function __construct(protected AuthorService $authorService)
     {
     }
@@ -29,7 +28,7 @@ class AuthorController extends Controller
             ? $request->input('per_page', 20)
             : 20;
 
-        $filters = $request->only(['search']);
+        $filters = ['search' => $request->get('search')];
 
         $authors = $this->authorService->getAllAuthors($filters, $perPage);
 
@@ -48,8 +47,9 @@ class AuthorController extends Controller
     public function store(AuthorRequest $request)
     {
         $validatedData = $request->validated();
+        $picture = $request->file('picture');
 
-        $author = $this->authorService->createAuthor($validatedData, $request);
+        $author = $this->authorService->createAuthor($validatedData, $picture);
 
         return response()->json([
             'status' => 'success',
@@ -81,8 +81,9 @@ class AuthorController extends Controller
     public function update(AuthorRequest $request, Author $author)
     {
         $validatedData = $request->validated();
+        $image = $request->file('image');
 
-        $author = $this->authorService->updateAuthor($author, $validatedData, $request);
+        $author = $this->authorService->updateAuthor($author, $validatedData, $image);
 
         return response()->json([
             'status' => 'success',

@@ -24,7 +24,7 @@ class PasswordResetController extends Controller
     public function sendResetPasswordEmail(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users,email',
         ]);
 
         $this->passwordResetService->sendResetLink($request->email);
