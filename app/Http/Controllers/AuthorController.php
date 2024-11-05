@@ -12,11 +12,9 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    protected AuthorService $authorService;
 
-    public function __construct(AuthorService $authorService)
+    public function __construct(protected AuthorService $authorService)
     {
-        $this->authorService = $authorService;
     }
 
     /**
@@ -49,7 +47,9 @@ class AuthorController extends Controller
      */
     public function store(AuthorRequest $request)
     {
-        $author = $this->authorService->createAuthor($request->validated(), $request);
+        $validatedData = $request->validated();
+
+        $author = $this->authorService->createAuthor($validatedData, $request);
 
         return response()->json([
             'status' => 'success',
@@ -80,7 +80,9 @@ class AuthorController extends Controller
      */
     public function update(AuthorRequest $request, Author $author)
     {
-        $author = $this->authorService->updateAuthor($author, $request->validated(), $request);
+        $validatedData = $request->validated();
+
+        $author = $this->authorService->updateAuthor($author, $validatedData, $request);
 
         return response()->json([
             'status' => 'success',
