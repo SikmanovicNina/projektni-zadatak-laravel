@@ -14,12 +14,12 @@ return new class () extends Migration {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('number_of_pages');
-            $table->integer('number_of_copies');
+            $table->integer('number_of_pages')->nullable();
+            $table->integer('number_of_copies')->nullable();
             $table->string('isbn')->unique();
-            $table->string('language');
-            $table->string('binding');
-            $table->string('script');
+            $table->string('language')->nullable();
+            $table->string('binding')->nullable();
+            $table->string('script')->nullable();
             $table->string('dimensions')->nullable();
             $table->timestamps();
         });
