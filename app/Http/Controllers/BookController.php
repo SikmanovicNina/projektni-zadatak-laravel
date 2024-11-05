@@ -28,7 +28,7 @@ class BookController extends Controller
             $perPage = 20;
         }
 
-        $books = Book::with($relations)->filter($request->only(['search']))->paginate($perPage);
+        $books = Book::with($relations)->filter(['search' => $request->get('search')])->paginate($perPage);
 
         return response()->json([
             'status' => 'success',
