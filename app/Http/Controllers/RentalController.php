@@ -69,7 +69,7 @@ class RentalController extends Controller
     {
         $result = $this->rentalService->returnBook($rental);
 
-        return response()->json($result, 200);
+        return response()->json($result);
     }
 
     /**

@@ -29,7 +29,7 @@ class PasswordResetController extends Controller
 
         $this->passwordResetService->sendResetLink($request->email);
 
-        return response()->json(['message' => 'Password reset link sent to your email.'], 200);
+        return response()->json(['message' => 'Password reset link sent to your email.']);
     }
 
     /**
@@ -51,7 +51,7 @@ class PasswordResetController extends Controller
         $status = $this->passwordResetService->resetPassword($data);
 
         if ($status === Password::PASSWORD_RESET) {
-            return response()->json(['message' => 'Password has been reset successfully.'], 200);
+            return response()->json(['message' => 'Password has been reset successfully.']);
         } else {
             return response()->json(['message' => __($status)], 400);
         }
