@@ -46,9 +46,9 @@ class BookController extends Controller
      */
     public function store(BookRequest $request)
     {
-        $book = $this->bookService->createBook(
-            $request->validated()
-        );
+        $validatedData = $request->validated();
+
+        $book = $this->bookService->createBook($validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -79,10 +79,9 @@ class BookController extends Controller
      */
     public function update(BookRequest $request, Book $book)
     {
-        $book = $this->bookService->updateBook(
-            $book,
-            $request->validated()
-        );
+        $validatedData = $request->validated();
+
+        $book = $this->bookService->updateBook($book, $validatedData);
 
         return response()->json([
             'status' => 'success',
