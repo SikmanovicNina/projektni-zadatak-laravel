@@ -39,9 +39,8 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         $validatedData = $request->validated();
-        $icon = $request->file('icon');
 
-        $category = $this->categoryService->storeCategory($validatedData, $icon);
+        $category = $this->categoryService->storeCategory($validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -66,9 +65,8 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         $validatedData = $request->validated();
-        $icon = $request->file('icon');
 
-        $category = $this->categoryService->updateCategory($category, $validatedData, $icon);
+        $category = $this->categoryService->updateCategory($category, $validatedData);
 
         return response()->json([
             'status' => 'success',

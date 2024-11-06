@@ -45,7 +45,10 @@ class AuthorService
     public function updateAuthor(Author $author, array $data)
     {
         if (!empty($data['picture'])) {
-            $this->handleAuthorPicture($author, $data['picture']);
+            if ($author->picture) {
+                $this->deletePicture($author->picture);
+            }
+            $data['picture'] = $this->storePicture($data['picture']);
         }
 
         $author->update($data);
@@ -86,21 +89,5 @@ class AuthorService
     private function deletePicture(string $picturePath)
     {
         Storage::disk('public')->delete($picturePath);
-    }
-
-    /**
-     * Handles updating the author's profile picture.
-     * Deletes the existing picture if it exists, then stores the new picture.
-     *
-     * @param Author $author The author object that contains the current picture data.
-     * @param mixed $newPicture The new picture data to be stored for the author.
-     */
-    private function handleAuthorPicture(Author $author, UploadedFile $newPicture)
-    {
-        if (!empty($author->picture)) {
-            $this->deletePicture($author->picture);
-        }
-
-        $author->picture = $this->storePicture($newPicture);
     }
 }

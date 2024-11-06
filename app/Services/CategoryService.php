@@ -19,10 +19,10 @@ class CategoryService
     /**
      * Store a new category with an optional icon.
      */
-    public function storeCategory(array $data, ?UploadedFile $icon = null)
+    public function storeCategory(array $data)
     {
-        if ($icon) {
-            $data['icon'] = $this->setPicturePath($icon);
+        if (!empty($data['icon'])) {
+            $data['icon'] = $this->storePicture($data['icon']);
         }
 
         return Category::create($data);
@@ -31,13 +31,13 @@ class CategoryService
     /**
      * Update an existing category with optional new icon.
      */
-    public function updateCategory(Category $category, array $data, ?UploadedFile $icon = null)
+    public function updateCategory(Category $category, array $data)
     {
-        if ($icon) {
+        if (!empty($data['icon'])) {
             if ($category->icon) {
                 $this->deletePicture($category);
             }
-            $data['icon'] = $this->setPicturePath($icon);
+            $data['icon'] = $this->storePicture($data['icon']);
         }
 
         $category->update($data);
@@ -59,7 +59,7 @@ class CategoryService
     /**
      * Store the icon file and return its path.
      */
-    public function setPicturePath(UploadedFile $file)
+    public function storePicture(UploadedFile $file)
     {
         return $file->store('icons', 'public');
     }
