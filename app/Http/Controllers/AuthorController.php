@@ -46,9 +46,8 @@ class AuthorController extends Controller
     public function store(AuthorRequest $request)
     {
         $validatedData = $request->validated();
-        $picture = $request->file('picture');
 
-        $author = $this->authorService->createAuthor($validatedData, $picture);
+        $author = $this->authorService->createAuthor($validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -80,9 +79,8 @@ class AuthorController extends Controller
     public function update(AuthorRequest $request, Author $author)
     {
         $validatedData = $request->validated();
-        $image = $request->file('image');
 
-        $author = $this->authorService->updateAuthor($author, $validatedData, $image);
+        $author = $this->authorService->updateAuthor($author, $validatedData);
 
         return response()->json([
             'status' => 'success',
