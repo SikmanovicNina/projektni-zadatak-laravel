@@ -18,5 +18,5 @@ window.Echo = new Echo({
 
 window.Echo.channel('booksChannel')
     .listen('BooksFetchedEvent', (e) => {
-        console.log(e.message);
+        alert(e.message);
     });
