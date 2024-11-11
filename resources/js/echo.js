@@ -18,6 +18,5 @@ window.Echo = new Echo({
 
 window.Echo.channel('booksChannel')
     .listen('BooksFetchedEvent', (e) => {
-        debugger
         console.log(e.message);
     });
