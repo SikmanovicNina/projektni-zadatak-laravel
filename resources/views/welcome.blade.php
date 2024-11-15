@@ -13,5 +13,13 @@
 
 </body>
 
+<script>
+    setTimeout(() => {
+        window.Echo.private('private-channel.user.{{ Auth::id() }}')
+            .listen('PrivateEvent', (e) => {
+                alert(e);
+            })
+    }, 400);
+</script>
 
 </html>
