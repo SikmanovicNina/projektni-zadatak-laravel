@@ -58,3 +58,6 @@ Make sure to configure your `.env` file properly. Key settings include:
 - `DB_USERNAME=sail`
 - `DB_PASSWORD=password`
 
+## Postman Collection
+
+[You can find Postman Collection here](./resources/Online library.postman_collection.json)
