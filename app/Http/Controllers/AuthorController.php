@@ -6,31 +6,34 @@ use App\Http\Requests\AuthorRequest;
 use App\Http\Resources\AuthorResource;
 use App\Http\Resources\ResponseCollection;
 use App\Models\Author;
+use App\Services\AuthorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AuthorController extends Controller
 {
+    public function __construct(protected AuthorService $authorService)
+    {
+    }
+
     /**
-     *  Display a listing of the resource.
+     * Display a listing of the resource.
      *
      * @param Request $request
      * @return JsonResponse
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 20);
+        $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
+            ? $request->input('per_page', 20)
+            : 20;
+        $filters = ['search' => $request->get('search')];
 
-        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
-            $perPage = 20;
-        }
-
-        $authors = Author::filter($request->only(['search']))->paginate($perPage);
+        $authors = $this->authorService->getAllAuthors($filters, $perPage);
 
         return response()->json([
             'status' => 'success',
-            'data' => new ResponseCollection($authors, AuthorResource::class)
+            'data' => new ResponseCollection($authors, AuthorResource::class),
         ]);
     }
 
@@ -44,11 +47,7 @@ class AuthorController extends Controller
     {
         $validatedData = $request->validated();
 
-        if ($request->hasFile('picture')) {
-            $validatedData['picture'] = $this->setPicturePath($request);
-        }
-
-        $author = Author::create($validatedData);
+        $author = $this->authorService->createAuthor($validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -81,15 +80,7 @@ class AuthorController extends Controller
     {
         $validatedData = $request->validated();
 
-        if ($request->hasFile('picture')) {
-            $validatedData['picture'] = $this->setPicturePath($request);
-
-            if ($author->picture) {
-                $this->deletePicture($author);
-            }
-        }
-
-        $author->update($validatedData);
+        $author = $this->authorService->updateAuthor($author, $validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -105,34 +96,8 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        if ($author->picture) {
-            $this->deletePicture($author);
-        }
+        $this->authorService->deleteAuthor($author);
 
-        $author->delete();
-
-        return response()->json(['message' => 'Author deleted successfully.'], 200);
-    }
-
-    /**
-     * Handle the uploading and storage of the author's picture.
-     *
-     * @param Request $request
-     * @return string The path where the picture is stored.
-     */
-    private function setPicturePath($request)
-    {
-        return $request->file('picture')->store('author-images', 'public');
-    }
-
-    /**
-     * Delete the author's picture from storage.
-     *
-     * @param Author $author
-     * @return void
-     */
-    private function deletePicture(Author $author)
-    {
-        Storage::disk('public')->delete($author->picture);
+        return response()->json(['message' => 'Author deleted successfully.']);
     }
 }

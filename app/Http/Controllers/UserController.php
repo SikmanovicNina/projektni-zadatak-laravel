@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PasswordResetRequested;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\ResponseCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    use AuthorizesRequests;
+    public function __construct(protected UserService $userService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -23,17 +24,16 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 20);
+        $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
+            ? $request->input('per_page', 20)
+            : 20;
+        $filters = $request->only(['search', 'role_id']);
 
-        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
-            $perPage = 20;
-        }
-
-        $users = User::latest()->filter($request->only(['search', 'role_id']))->paginate($perPage);
+        $users = $this->userService->getAllUsers($filters, $perPage);
 
         return response()->json([
             'status' => 'success',
-            'data' => new ResponseCollection($users, UserResource::class)
+            'data' => new ResponseCollection($users, UserResource::class),
         ]);
     }
 
@@ -47,15 +47,11 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
-        $user = User::create($validatedData);
-
-        if ($validatedData['role_id'] === User::ROLE_LIBRARIAN) {
-            event(new PasswordResetRequested($user));
-        }
+        $user = $this->userService->createUser($validatedData);
 
         return response()->json([
             'status' => 'success',
-            'data' => new UserResource($user)
+            'data' => new UserResource($user),
         ]);
     }
 
@@ -67,11 +63,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user = $user->load('role');
-
         return response()->json([
             'status' => 'success',
-            'data' => new UserResource($user)
+            'data' => new UserResource($user),
         ]);
     }
 
@@ -86,11 +80,11 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
-        $user->update($validatedData);
+        $user = $this->userService->updateUser($user, $validatedData);
 
         return response()->json([
             'status' => 'success',
-            'data' => new UserResource($user)
+            'data' => new UserResource($user),
         ]);
     }
 
@@ -102,7 +96,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        $this->userService->deleteUser($user);
 
         return response()->json(['message' => 'User deleted successfully.']);
     }
@@ -119,11 +113,9 @@ class UserController extends Controller
         $request->validate([
             'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
+        $picture = $request->file('picture');
 
-        $path = $request->file('picture')->store('user-images', 'public');
-        $user->profile_picture = $path;
-
-        $user->save();
+        $path = $this->userService->uploadProfilePicture($user, $picture);
 
         return response()->json([
             'message' => 'Picture uploaded successfully',

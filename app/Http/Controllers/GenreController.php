@@ -6,26 +6,30 @@ use App\Http\Requests\GenreRequest;
 use App\Http\Resources\GenreResource;
 use App\Http\Resources\ResponseCollection;
 use App\Models\Genre;
+use App\Services\GenreService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
+    public function __construct(protected GenreService $genreService)
+    {
+    }
+
     /**
-     *  Display a listing of the resource.
+     * Display a listing of the resource.
      *
      * @param Request $request
      * @return JsonResponse
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 20);
+        $perPage = in_array($request->input('per_page', 20), self::PER_PAGE_OPTIONS)
+            ? $request->input('per_page', 20)
+            : 20;
+        $filters = $request->only(['search']);
 
-        if (!in_array($perPage, self::PER_PAGE_OPTIONS)) {
-            $perPage = 20;
-        }
-
-        $genres = Genre::filter($request->only(['search']))->paginate($perPage);
+        $genres = $this->genreService->getAllGenres($filters, $perPage);
 
         return response()->json([
             'status' => 'success',
@@ -43,7 +47,7 @@ class GenreController extends Controller
     {
         $validatedData = $request->validated();
 
-        $genre = Genre::create($validatedData);
+        $genre = $this->genreService->createGenre($validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -76,7 +80,7 @@ class GenreController extends Controller
     {
         $validatedData = $request->validated();
 
-        $genre->update($validatedData);
+        $genre = $this->genreService->updateGenre($genre, $validatedData);
 
         return response()->json([
             'status' => 'success',
@@ -92,7 +96,7 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        $genre->delete();
+        $this->genreService->deleteGenre($genre);
 
         return response()->json(['message' => 'Genre deleted successfully.']);
     }

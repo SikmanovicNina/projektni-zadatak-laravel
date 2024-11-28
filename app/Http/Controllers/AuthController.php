@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function __construct(protected AuthService $authService)
+    {
+    }
+
     /**
      * Authenticate a user and issue an API token.
      *
@@ -22,15 +26,13 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $token = $this->authService->login($request->email, $request->password);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$token) {
             return response()->json([
                 'message' => 'The provided credentials are incorrect.',
             ], 401);
         }
-
-        $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'token' => $token,
@@ -45,7 +47,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        $this->authService->logout($request->user());
 
         return response()->json([
             'message' => 'Logged out successfully',
