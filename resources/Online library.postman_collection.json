@@ -1,0 +1,2218 @@
+{
+	"info": {
+		"_postman_id": "f99e3d83-3efa-4435-a8da-262acf8039fe",
+		"name": "Online library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16031099",
+		"_collection_link": "https://nbbbb2.postman.co/workspace/nbbbb-Workspace~059d6c52-aeed-405f-ba28-796d4bc22539/collection/16031099-f99e3d83-3efa-4435-a8da-262acf8039fe?action=share&source=collection_link&creator=16031099"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Nina\",\n    \"last_name\": \"Test\",\n    \"username\": \"Username\",\n    \"email\": \"nina1@gmail.com\",\n    \"jmbg\": \"5217927382749\",\n    \"role_id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/users",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "###### This endpoint creates a new user. The request requires specific data fields with validation rules to ensure data integrity.\n\n**Request Body**\n\n- **first_name** (string, required): User's first name, maximum length of 255 characters.\n    \n- **last_name** (string, required): User's last name, maximum length of 255 characters.\n    \n- **email** (string, required): User's email address, must be a valid email format, unique across users.\n    \n- **username** (string, required, unique): User's username, maximum length of 255 characters.\n    \n- **jmbg** (string, required): Unique identification number, must be exactly 13 digits and unique across users.\n    \n- **role_id** (integer, required): ID of the user's role, must reference an existing role in the system.\n    \n\n#### Example Response:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 18,\n        \"first_name\": \"Nina\",\n        \"last_name\": \"Test\",\n        \"username\": \"Username\",\n        \"email\": \"nina1@gmail.com\",\n        \"jmbg\": \"5217927382749\",\n        \"role_id\": 2,\n        \"profile_picture\": null\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/users/15",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"users",
+								"15"
+							]
+						},
+						"description": "###### This endpoint retrieves detailed information for a specific user by their user ID.\n\n#### Example Response:\n\n``` json\njsonCopy code{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 15,\n        \"first_name\": \"Ana\",\n        \"last_name\": \"Boskovic\",\n        \"username\": \"anci\",\n        \"email\": \"anci@example.org\",\n        \"jmbg\": \"5877937382749\",\n        \"role_id\": 1,\n        \"profile_picture\": \"user-images/Wm5DZHd7kEZzyBNiblSaOJkL5KwJ3kXNiXXlAXoG.png\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"ANA\",\n    \"last_name\": \"Boskovic\",\n    \"username\": \"anci\",\n    \"email\": \"anci@example.org\",\n    \"jmbg\": \"5877937382749\",\n    \"role_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/users/15?_method=PUT",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"users",
+								"15"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "###### This endpoint updates details for a specific user by their user ID.\n\n#### Example Response:\n\n``` json\njsonCopy code{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 15,\n        \"first_name\": \"ANA\",\n        \"last_name\": \"Boskovic\",\n        \"username\": \"anci\",\n        \"email\": \"anci@example.org\",\n        \"jmbg\": \"5877937382749\",\n        \"role_id\": 1,\n        \"profile_picture\": \"user-images/Wm5DZHd7kEZzyBNiblSaOJkL5KwJ3kXNiXXlAXoG.png\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0:80/api/users?per_page=20",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "80",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "###### This endpoint returns a list of users within the system. You can specify the number of users to display per page, with options of **20**, **50**, or **100**. By default, the endpoint returns **20** users per page.\n\n**Response Example:**\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 20,\n            \"total\": 4\n        },\n        \"data\": [\n            {\n                \"id\": 10,\n                \"first_name\": \"Danika\",\n                \"last_name\": \"Bartoletti\",\n                \"username\": \"tabitha16\",\n                \"email\": \"hreichel@example.net\",\n                \"jmbg\": \"2114941808553\",\n                \"role_id\": 2,\n                \"profile_picture\": null\n            },\n            {\n                \"id\": 5,\n                \"first_name\": \"Jamey\",\n                \"last_name\": \"Effertz\",\n                \"username\": \"salvador93\",\n                \"email\": \"veronica.nolan@example.org\",\n                \"jmbg\": \"1332463415582\",\n                \"role_id\": 2,\n                \"profile_picture\": null\n            },\n            {\n                \"id\": 7,\n                \"first_name\": \"Natalia\",\n                \"last_name\": \"O'Connell\",\n                \"username\": \"koch.magnolia\",\n                \"email\": \"robel.gianni@example.org\",\n                \"jmbg\": \"5868728156399\",\n                \"role_id\": 1,\n                \"profile_picture\": null\n            },\n            {\n                \"id\": 8,\n                \"first_name\": \"Eliseo\",\n                \"last_name\": \"Cartwright\",\n                \"username\": \"preston.mclaughlin\",\n                \"email\": \"elenor87@example.com\",\n                \"jmbg\": \"8576831885223\",\n                \"role_id\": 1,\n                \"profile_picture\": null\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload user picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/Users/nikolinasikmanovic/Desktop/Screenshot 2024-10-28 at 14.46.34.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/users/15/upload-picture",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"users",
+								"15",
+								"upload-picture"
+							]
+						},
+						"description": "###### This endpoint stores the user's profile picture.  \n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Picture uploaded successfully\",\n    \"picture_path\": \"user-images/4RRqOG8zAgDPOFFfTHdt91zkAvipmb8XkU9GGkOM.png\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/users/6",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"users",
+								"6"
+							]
+						},
+						"description": "###### This endpoint deletes the user from the system.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"User deleted successfully.\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Reset a password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"nina@example.org\",\n    \"password\": \"123123nina\",\n    \"password_confirmation\": \"123123nina\",\n    \"token\": \"4abfd01f59a4fbfeb4e0a4fc6d3b2e30480fb1a0d5bad907e61f8f94e951e99e\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/password/reset",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"password",
+								"reset"
+							]
+						},
+						"description": "###### This endpoint is used to reset a user’s password. It requires a valid password reset token (sent via email) and the new password along with its confirmation.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Password has been reset successfully.\"\n}\n\n ```\n\nIf the token is invalid, the response will return an error message.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"This password reset token is invalid.\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Request a password reset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"nina@example.org\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/password/reset-request",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"password",
+								"reset-request"
+							]
+						},
+						"description": "###### This endpoint initiates the password reset process by sending a password reset link to the user’s email. The link contains a unique reset token required to complete the password reset.\n\n###### If the email is registered, a message confirms that the password reset link has been sent.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Password reset link sent to your email.\"\n}\n\n ```\n\nReturns an error if the email is invalid or not associated with any account.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"We can\\'t find a user with that email address.\"\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Create category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "icon",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "name",
+									"value": "Category3",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Category3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/categories",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						},
+						"description": "###### This endpoint creates a new category. The request requires specific data fields with validation rules to ensure data integrity.\n\n**Request Body:**\n\n- **name** (string, required): Category's name, maximum length of 255 characters.\n    \n- **description** (string, required): Category's description, maximum length of 500 characters.\n    \n- **icon** (file, optional): Category's icon, must be an image file with a maximum size of 5 MB.\n    \n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"Category3\",\n        \"description\": \"Category3\",\n        \"icon\": null\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/categories/2",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"categories",
+								"2"
+							]
+						},
+						"description": "###### This endpoint retrieves detailed information for a specific category.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"test123s\",\n        \"description\": \"teszt2\",\n        \"icon\": \"icons/aynmwZlCG4xSB8uLcK0JdSVX9Kxc6B4WTapr4qHp.jpg\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "icon",
+									"type": "file",
+									"src": "/Users/nikolinasikmanovic/Desktop/Screenshot 2024-10-28 at 14.46.34.png"
+								},
+								{
+									"key": "name",
+									"value": "test123",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "test123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/categories/2?_method=PUT",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"categories",
+								"2"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "###### This endpoint updates details for a specific category by their category ID.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"test123\",\n        \"description\": \"test123\",\n        \"icon\": \"icons/6OLBDxaxcBD45yJKkNdsRQkbEE6sPwOGBM3S6Jqt.png\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/categories?per_page=20",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"categories"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						},
+						"description": "###### This endpoint returns a list of categories within the system.\n\n**Response Example:**\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": [\n        {\n            \"id\": 2,\n            \"name\": \"test123s\",\n            \"description\": \"teszt2\",\n            \"icon\": \"icons/aynmwZlCG4xSB8uLcK0JdSVX9Kxc6B4WTapr4qHp.jpg\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Category2\",\n            \"description\": \"Category2\",\n            \"icon\": null\n        }\n    ]\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/categories/1",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"categories",
+								"1"
+							]
+						},
+						"description": "###### This endpoint deletes the category from the system.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Category deleted successfully.\"\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Genre",
+			"item": [
+				{
+					"name": "Create genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Genre3\",\n    \"description\": \"genre 3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/genres",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"genres"
+							]
+						},
+						"description": "###### This endpoint creates a new genre. The request requires specific data fields with validation rules to ensure data integrity.\n\n**Request Body:**\n\n- **name** (string, required, unique): Genre's name, maximum length of 255 characters.\n    \n- **description** (string, required): Genre's description, maximum length of 500 characters.\n    \n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 4,\n        \"name\": \"Genre3\",\n        \"description\": \"genre 3\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Genre123\",\n    \"description\": \"2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/genres/4?_method=PUT",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"genres",
+								"4"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "###### This endpoint updates details for a specific genre by their genre ID.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 4,\n        \"name\": \"Genre123\",\n        \"description\": \"2\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/genres/2",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"genres",
+								"2"
+							]
+						},
+						"description": "###### This endpoint retrieves detailed information for a specific genre.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"Genre1\",\n        \"description\": \"genre 1\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/genres/1",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"genres",
+								"1"
+							]
+						},
+						"description": "###### This endpoint deletes the genre from the system.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Genre deleted successfully.\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all genres",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/genres",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"genres"
+							]
+						},
+						"description": "###### This endpoint returns a list of genres within the system. You can specify the number of genres to display per page, with options of **20**, **50**, or **100**. By default, the endpoint returns **20** genres per page.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 20,\n            \"total\": 3\n        },\n        \"data\": [\n            {\n                \"id\": 2,\n                \"name\": \"Genre1\",\n                \"description\": \"genre 1\"\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Genre2\",\n                \"description\": \"genre 2\"\n            },\n            {\n                \"id\": 4,\n                \"name\": \"Genre123\",\n                \"description\": \"2\"\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Author",
+			"item": [
+				{
+					"name": "Create author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Nina",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Nina autor",
+									"type": "text"
+								},
+								{
+									"key": "biography",
+									"value": "aut",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/Users/nikolinasikmanovic/Desktop/Screenshot 2024-10-28 at 14.46.34.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/authors",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"authors"
+							]
+						},
+						"description": "###### This endpoint creates a new user. The request requires specific data fields with validation rules to ensure data integrity.\n\n**Request Body:**\n\n- **first_name** (string, required): Author's name, maximum length of 255 characters.\n    \n- **last_name** (string, required): Author's last name, maximum length of 255 characters.\n    \n- **biography** (string, optional): Author's biography\n    \n- **picture** (file, optional): Author's picture, must be an image file with a maximum size of 5 MB.\n    \n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 327,\n        \"first_name\": \"Nina\",\n        \"last_name\": \"Nina autor\",\n        \"biography\": \"aut\",\n        \"picture\": \"author-images/5nMe1vS2NYPFj2oIhjA63OBCSxu54c1CGQzW0ROE.png\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/authors/4",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"authors",
+								"4"
+							]
+						},
+						"description": "###### This endpoint retrieves detailed information for a specific author.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 4,\n        \"first_name\": \"nina12\",\n        \"last_name\": \"nina2\",\n        \"biography\": \"nina biography\",\n        \"picture\": null\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "nina12",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "nina2",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "biography",
+									"value": "nina biography",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/authors/4?_method=PUT",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"authors",
+								"4"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "###### This endpoint updates details for a specific author by their ID.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 4,\n        \"first_name\": \"nina12\",\n        \"last_name\": \"nina2\",\n        \"biography\": \"nina biography\",\n        \"picture\": null\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/authors/5",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"authors",
+								"5"
+							]
+						},
+						"description": "###### This endpoint deletes the author from the system.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Author deleted successfully.\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all authors",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/authors",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"authors"
+							]
+						},
+						"description": "###### This endpoint returns a list of authors within the system. You can specify the number of authors to display per page, with options of **20**, **50**, or **100**. By default, the endpoint returns **20** authors per page.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 20,\n            \"total\": 6\n        },\n        \"data\": [\n            {\n                \"id\": 3,\n                \"first_name\": \"United States. Congress. Senate. Committee on Armed Services. Subcommittee on Tactical Air Power\",\n                \"last_name\": \"United States. Congress. Senate. Committee on Armed Services. Subcommittee on Tactical Air Power\",\n                \"biography\": null,\n                \"picture\": null\n            },\n            {\n                \"id\": 4,\n                \"first_name\": \"nina12\",\n                \"last_name\": \"nina2\",\n                \"biography\": \"nina biography\",\n                \"picture\": null\n            },\n            {\n                \"id\": 6,\n                \"first_name\": \"Frederick TRYON\",\n                \"last_name\": \"Frederick TRYON\",\n                \"biography\": null,\n                \"picture\": null\n            },\n            {\n                \"id\": 7,\n                \"first_name\": \"Carl H. Eigenmann\",\n                \"last_name\": \"Carl H. Eigenmann\",\n                \"biography\": null,\n                \"picture\": null\n            },\n            {\n                \"id\": 8,\n                \"first_name\": \"Charles Torrey Simpson\",\n                \"last_name\": \"Charles Torrey Simpson\",\n                \"biography\": null,\n                \"picture\": null\n            },\n            {\n                \"id\": 9,\n                \"first_name\": \"David Starr Jordan\",\n                \"last_name\": \"David Starr Jordan\",\n                \"biography\": null,\n                \"picture\": null\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Publisher",
+			"item": [
+				{
+					"name": "Create publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"BookHouse Publishing\",\n    \"address\": \"123 Main St, Springfield\",\n    \"website\": \"https://www.vijesti.me/\",\n    \"email\":\"testingemail@gmail.com\",\n    \"phone_number\": \"123-456-7890\",\n    \"established_year\": 1995\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/publishers",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"publishers"
+							]
+						},
+						"description": "###### This endpoint creates a new publisher. The request requires specific data fields with validation rules to ensure data integrity.\n\n**Request Body:**\n\n- **name** (string, required): Author's name, maximum length of 255 characters.\n    \n- **address** (string, required): Author's address, maximum length of 1000 characters.\n    \n- **website** (string, url): Author's websire, maximum length of 255 characters.\n    \n- **phone_number** (string, optional): Author's phone number, maximum length of 50 characters.\n    \n- **established_year** (optional, integer, 4 digits)\n    \n- **email** (required, string, email, unique): Author's email, maximum length of 255 characters.\n    \n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 4,\n        \"name\": \"BookHouse Publishing\",\n        \"address\": \"123 Main St, Springfield\",\n        \"website\": \"https://www.vijesti.me/\",\n        \"email\": \"testingemail@gmail.com\",\n        \"phone_number\": \"123-456-7890\",\n        \"established_year\": 1995\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"BookHouse Publishing\",\n    \"address\": \"123 Main St, Springfield\",\n    \"website\": \"https://www.vijesti.me/\",\n    \"email\":\"testigemail@gmail.com\",\n    \"phone_number\": \"123-456-7890\",\n    \"established_year\": 1992\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/publishers/3?_method=PUT",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"3"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "###### This endpoint updates details for a specific user by their user ID.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 3,\n        \"name\": \"BookHouse Publishing\",\n        \"address\": \"123 Main St, Springfield\",\n        \"website\": \"https://www.vijesti.me/\",\n        \"email\": \"testigemail@gmail.com\",\n        \"phone_number\": \"123-456-7890\",\n        \"established_year\": 1992\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/publishers/1",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"1"
+							]
+						},
+						"description": "###### This endpoint retrieves detailed information for a specific publisher.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"BookHouse\",\n        \"address\": \"123 Main St, Springfield\",\n        \"website\": \"http://bookhouse.com\",\n        \"email\": \"info@bookhouse.com\",\n        \"phone_number\": \"123-456-7890\",\n        \"established_year\": \"1995\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all publishers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/publishers",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"publishers"
+							]
+						},
+						"description": "###### This endpoint returns a list of publishers within the system. You can specify the number of publishers to display per page, with options of 20, 50, or 100. By default, the endpoint returns 20 publishers per page.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 20,\n            \"total\": 3\n        },\n        \"data\": [\n            {\n                \"id\": 1,\n                \"name\": \"BookHouse\",\n                \"address\": \"123 Main St, Springfield\",\n                \"website\": \"http://bookhouse.com\",\n                \"email\": \"info@bookhouse.com\",\n                \"phone_number\": \"123-456-7890\",\n                \"established_year\": \"1995\"\n            },\n            {\n                \"id\": 3,\n                \"name\": \"BookHouse Publishing\",\n                \"address\": \"123 Main St, Springfield\",\n                \"website\": \"https://www.vijesti.me/\",\n                \"email\": \"testigemail@gmail.com\",\n                \"phone_number\": \"123-456-7890\",\n                \"established_year\": \"1992\"\n            },\n            {\n                \"id\": 4,\n                \"name\": \"BookHouse Publishing\",\n                \"address\": \"123 Main St, Springfield\",\n                \"website\": \"https://www.vijesti.me/\",\n                \"email\": \"testingemail@gmail.com\",\n                \"phone_number\": \"123-456-7890\",\n                \"established_year\": \"1995\"\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/publishers/2",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"2"
+							]
+						},
+						"description": "###### This endpoint deletes the publisher from the system.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Publisher deleted successfully.\"\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Book",
+			"item": [
+				{
+					"name": "Create book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Book\",\n    \"description\": \"\",\n    \"number_of_pages\": 200,\n    \"number_of_copies\": 10,\n    \"isbn\": \"9781012111100\",\n    \"language\": \"French\",\n    \"script\": \"Cyrillic\",   \n    \"binding\": \"Hardcover\",   \n    \"dimensions\": \"15cm x 21cm\",   \n    \"categories\": [3,2],\n    \"genres\":[3,2],\n    \"publishers\":[1,3],\n    \"authors\":[3,4]\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/books",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books"
+							]
+						},
+						"description": "###### This endpoint creates a new genre. The request requires specific data fields with validation rules to ensure data integrity.\n\n**Request Body:**\n\n- **name** (string, required): Book's name, with a maximum length of 255 characters.\n    \n- **description** (string, optional): Brief description of the book.\n    \n- **number_of_pages** (integer, required): Total number of pages in the book. Must be between 1 and 2,000.\n    \n- **number_of_copies** (integer, required): Available number of copies. Must be at least 1.\n    \n- **isbn** (string, required): ISBN of the book, unique within the books table, with a maximum length of 13 characters.\n    \n- **language** (string, required): Language of the book, with a maximum length of 50 characters.\n    \n- **binding** (string, required): Type of binding, must be one of the predefined values in the system ('Hardcover', 'Paperback', 'Spiral-bound').\n    \n- **script** (string, required): Script type used in the book, must be one of the predefined values in the system ('Cyrillic', 'Latin', 'Arabic').\n    \n- **dimensions** (string, required): Dimensions of the book, must be one of the predefined values in the system ('A1', 'A2', 'A3', '21cm x 29.7cm', '15cm x 21cm').\n    \n- **categories** (array, optional): Array of category IDs associated with the book.\n    \n    - **categories.**\\* (integer, optional): Each entry should be a valid category ID that exists in the `categories` table.\n        \n- **genres** (array, optional): Array of genre IDs associated with the book.\n    \n    - **genres.**\\* (integer, optional): Each entry should be a valid genre ID that exists in the `genres` table.\n        \n- **authors** (array, optional): Array of author IDs associated with the book.\n    \n    - **authors.**\\* (integer, optional): Each entry should be a valid author ID that exists in the `authors` table.\n        \n- **publishers** (array, optional): Array of publisher IDs associated with the book.\n    \n    - **publishers.**\\* (integer, optional): Each entry should be a valid publisher ID that exists in the `publishers` table.\n        \n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 281,\n        \"name\": \"Book\",\n        \"description\": null,\n        \"number_of_pages\": 200,\n        \"number_of_copies\": 10,\n        \"isbn\": \"9781012111100\",\n        \"language\": \"French\",\n        \"script\": \"Cyrillic\",\n        \"binding\": \"Hardcover\",\n        \"dimensions\": \"15cm x 21cm\",\n        \"images\": [],\n        \"categories\": [\n            {\n                \"id\": 3,\n                \"name\": \"Category2\",\n                \"description\": \"Category2\",\n                \"icon\": null\n            },\n            {\n                \"id\": 2,\n                \"name\": \"test123\",\n                \"description\": \"test123\",\n                \"icon\": \"icons/6OLBDxaxcBD45yJKkNdsRQkbEE6sPwOGBM3S6Jqt.png\"\n            }\n        ],\n        \"publishers\": [\n            {\n                \"id\": 1,\n                \"name\": \"BookHouse\",\n                \"address\": \"123 Main St, Springfield\",\n                \"website\": \"http://bookhouse.com\",\n                \"email\": \"info@bookhouse.com\",\n                \"phone_number\": \"123-456-7890\",\n                \"established_year\": \"1995\"\n            },\n            {\n                \"id\": 3,\n                \"name\": \"BookHouse Publishing\",\n                \"address\": \"123 Main St, Springfield\",\n                \"website\": \"https://www.vijesti.me/\",\n                \"email\": \"testigemail@gmail.com\",\n                \"phone_number\": \"123-456-7890\",\n                \"established_year\": \"1992\"\n            }\n        ],\n        \"authors\": [\n            {\n                \"id\": 3,\n                \"first_name\": \"United States. Congress. Senate. Committee on Armed Services. Subcommittee on Tactical Air Power\",\n                \"last_name\": \"United States. Congress. Senate. Committee on Armed Services. Subcommittee on Tactical Air Power\",\n                \"biography\": null,\n                \"picture\": null\n            },\n            {\n                \"id\": 4,\n                \"first_name\": \"nina12\",\n                \"last_name\": \"nina2\",\n                \"biography\": \"nina biography\",\n                \"picture\": null\n            }\n        ],\n        \"genres\": [\n            {\n                \"id\": 3,\n                \"name\": \"Genre2\",\n                \"description\": \"genre 2\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Genre1\",\n                \"description\": \"genre 1\"\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"J\",\n    \"description\": \"\",\n    \"number_of_pages\": 200,\n    \"number_of_copies\": 10,\n    \"isbn\": \"9781012911100\",\n    \"language\": \"French\",\n    \"script\": \"Cyrillic\",   \n    \"binding\": \"Hardcover\",   \n    \"dimensions\": \"15cm x 21cm\",   \n    \"categories\": [3,2],\n    \"genres\":[3]\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/books/278?_method=PUT",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books",
+								"278"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "###### This endpoint updates details for a specific user by their user ID.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 278,\n        \"name\": \"J\",\n        \"description\": null,\n        \"number_of_pages\": 200,\n        \"number_of_copies\": 10,\n        \"isbn\": \"9781012911100\",\n        \"language\": \"French\",\n        \"script\": \"Cyrillic\",\n        \"binding\": \"Hardcover\",\n        \"dimensions\": \"15cm x 21cm\",\n        \"images\": [],\n        \"categories\": [\n            {\n                \"id\": 3,\n                \"name\": \"Category2\",\n                \"description\": \"Category2\",\n                \"icon\": null\n            },\n            {\n                \"id\": 2,\n                \"name\": \"test123\",\n                \"description\": \"test123\",\n                \"icon\": \"icons/6OLBDxaxcBD45yJKkNdsRQkbEE6sPwOGBM3S6Jqt.png\"\n            }\n        ],\n        \"publishers\": [],\n        \"authors\": [],\n        \"genres\": [\n            {\n                \"id\": 3,\n                \"name\": \"Genre2\",\n                \"description\": \"genre 2\"\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/books/279",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books",
+								"279"
+							]
+						},
+						"description": "###### This endpoint retrieves detailed information for a specific book.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 279,\n        \"name\": \"Book\",\n        \"description\": null,\n        \"number_of_pages\": 200,\n        \"number_of_copies\": 10,\n        \"isbn\": \"9781012910100\",\n        \"language\": \"French\",\n        \"script\": \"Cyrillic\",\n        \"binding\": \"Hardcover\",\n        \"dimensions\": \"15cm x 21cm\",\n        \"images\": [],\n        \"categories\": [\n            {\n                \"id\": 3,\n                \"name\": \"Category2\",\n                \"description\": \"Category2\",\n                \"icon\": null\n            },\n            {\n                \"id\": 2,\n                \"name\": \"test123\",\n                \"description\": \"test123\",\n                \"icon\": \"icons/6OLBDxaxcBD45yJKkNdsRQkbEE6sPwOGBM3S6Jqt.png\"\n            }\n        ],\n        \"publishers\": [\n            {\n                \"id\": 1,\n                \"name\": \"BookHouse\",\n                \"address\": \"123 Main St, Springfield\",\n                \"website\": \"http://bookhouse.com\",\n                \"email\": \"info@bookhouse.com\",\n                \"phone_number\": \"123-456-7890\",\n                \"established_year\": \"1995\"\n            },\n            {\n                \"id\": 3,\n                \"name\": \"BookHouse Publishing\",\n                \"address\": \"123 Main St, Springfield\",\n                \"website\": \"https://www.vijesti.me/\",\n                \"email\": \"testigemail@gmail.com\",\n                \"phone_number\": \"123-456-7890\",\n                \"established_year\": \"1992\"\n            }\n        ],\n        \"authors\": [],\n        \"genres\": [\n            {\n                \"id\": 3,\n                \"name\": \"Genre2\",\n                \"description\": \"genre 2\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Genre1\",\n                \"description\": \"genre 1\"\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/books/2",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books",
+								"2"
+							]
+						},
+						"description": "###### This endpoint deletes the book from the system.**\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Book deleted successfully.\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all books",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/books?per_page=100",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "100"
+								}
+							]
+						},
+						"description": "###### This endpoint returns a list of books within the system. You can specify the number of books to display per page, with options of 20, 50, or 100. By default, the endpoint returns 20 books per page.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 100,\n            \"total\": 21\n        },\n        \"data\": [\n            {\n                \"id\": 4,\n                \"name\": \"Advanced PHP\",\n                \"description\": \"Learn advanced PHP topics.\",\n                \"number_of_pages\": 200,\n                \"number_of_copies\": 4,\n                \"isbn\": \"9783162914100\",\n                \"language\": \"French\",\n                \"script\": \"Cyrillic\",\n                \"binding\": \"Hardcover\",\n                \"dimensions\": \"15cm x 21cm\",\n                \"images\": [\n                    {\n                        \"id\": 5554,\n                        \"image\": \"book-images/iS5Ko0Xd3lmERY2IQkxgxsGUyGDL3Z4L4laZasyQ.png\",\n                        \"created_at\": \"2024-10-29T08:48:06.000000Z\",\n                        \"updated_at\": \"2024-10-29T08:48:06.000000Z\",\n                        \"book_id\": 4,\n                        \"cover_image\": 0\n                    },\n                    {\n                        \"id\": 5555,\n                        \"image\": \"book-images/1VbXhn2HnOvVvtWwjZ4g6dbIAhUpOMcpCjiskkGm.png\",\n                        \"created_at\": \"2024-10-29T08:48:15.000000Z\",\n                        \"updated_at\": \"2024-10-29T08:48:15.000000Z\",\n                        \"book_id\": 4,\n                        \"cover_image\": 0\n                    }\n                ],\n                \"categories\": [],\n                \"publishers\": [],\n                \"authors\": [],\n                \"genres\": []\n            },\n            {\n                \"id\": 5,\n                \"name\": \"Advanced PHP\",\n                \"description\": \"Learn advanced PHP topics.\",\n                \"number_of_pages\": 200,\n                \"number_of_copies\": 9,\n                \"isbn\": \"9783112914100\",\n                \"language\": \"French\",\n                \"script\": \"Cyrillic\",\n                \"binding\": \"Hardcover\",\n                \"dimensions\": \"15cm x 21cm\",\n                \"images\": [],\n                \"categories\": [],\n                \"publishers\": [],\n                \"authors\": [],\n                \"genres\": []\n            },\n            {\n                \"id\": 6,\n                \"name\": \"Advanced PHP\",\n                \"description\": \"Learn advanced PHP topics.\",\n                \"number_of_pages\": 200,\n                \"number_of_copies\": 10,\n                \"isbn\": \"9781112914100\",\n                \"language\": \"French\",\n                \"script\": \"Cyrillic\",\n                \"binding\": \"Hardcover\",\n                \"dimensions\": \"15cm x 21cm\",\n                \"images\": [],\n                \"categories\": [],\n                \"publishers\": [],\n                \"authors\": [],\n                \"genres\": []\n            },\n            {\n                \"id\": 21,\n                \"name\": \"Peripheral Production in X Pile\",\n                \"description\": null,\n                \"number_of_pages\": 8,\n                \"number_of_copies\": 3,\n                \"isbn\": \"UOM:39015095163633\",\n                \"language\": \"en\",\n                \"script\": \"Latin\",\n                \"binding\": \"Paperback\",\n                \"dimensions\": null,\n                \"images\": [\n                    {\n                        \"id\": 82,\n                        \"image\": \"content?id=O0qKzkaNuscC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE72BZ33lU5xg5EJ2LcVSVA2x6-rTATh84_-XQ5n9sAVHWohJA5sUtilS7wZnu8lVzxW4zSFOhDmQUFgZjMqfjh0Y22Jes3RxLTuk_QaehS38wmyfS3zRiEc-LEXLu1tH0Z-ZpST_&source=gbs_api\",\n                        \"created_at\": \"2024-10-17T12:33:28.000000Z\",\n                        \"updated_at\": \"2024-10-17T12:33:28.000000Z\",\n                        \"book_id\": 21,\n                        \"cover_image\": 1\n                    },\n                    {\n                        \"id\": 97,\n                        \"image\": \"content?id=O0qKzkaNuscC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE71wswLvQfGPrkHJWcMvb3q7kGNkBoDZVvUMwwr8-PbeO2akWdPkpx9H8O4SeADc6ZChdI00gmyJGYgNsjmeIHyNqXsESZ-qJ1iKXjCABAB6CpXIjySIbxYz7lSFzghARHBasG-I&source=gbs_api\",\n                        \"created_at\": \"2024-10-17T12:51:56.000000Z\",\n                        \"updated_at\": \"2024-10-17T12:51:56.000000Z\",\n                        \"book_id\": 21,\n                        \"cover_image\": 1\n                    }\n                ],\n                \"categories\": [],\n                \"publishers\": [],\n                \"authors\": [],\n                \"genres\": []\n            },\n            {\n                \"id\": 22,\n                \"name\": \"The Outlook for Women as Medical X-ray Technicians\",\n                \"description\": null,\n                \"number_of_pages\": 72,\n                \"number_of_copies\": 3,\n                \"isbn\": \"IND:30000089369833\",\n                \"language\": \"en\",\n                \"script\": \"Latin\",\n                \"binding\": \"Paperback\",\n                \"dimensions\": null,\n                \"images\": [\n                    {\n                        \"id\": 83,\n                        \"image\": \"content?id=JQtxS6wSzWwC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE70tFhoPo26W8UpR8WaXPNk6pKjSwikFzR2WPwM0eNG3TtnSU-Czc_frox_PfpPpuEOTTP-H6GrnaGpOgDxROrio8Npw-DHZyQVmRd-7GHXO4OliMZt0vGgjZ89V60ePqfta9IFn&source=gbs_api\",\n                        \"created_at\": \"2024-10-17T12:33:28.000000Z\",\n                        \"updated_at\": \"2024-10-17T12:33:28.000000Z\",\n                        \"book_id\": 22,\n                        \"cover_image\": 1\n                    },\n                    {\n                        \"id\": 98,\n                        \"image\": \"content?id=JQtxS6wSzWwC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE70amFQUN3K7Qmh6P5CeSWZa7CbIJNbt_QM7385hYfUnLJRISnzWoqh0Koe5EFgJoFVyt8n5Zupii4jusMIqzGXlCymr25VMfMCH7u6IBfW2NPYEqNIN9HCI9j1hytL9m7P0BA2O&source=gbs_api\",\n                        \"created_at\": \"2024-10-17T12:51:56.000000Z\",\n                        \"updated_at\": \"2024-10-17T12:51:56.000000Z\",\n                        \"book_id\": 22,\n                        \"cover_image\": 1\n                    }\n                ],\n                \"categories\": [],\n                \"publishers\": [],\n                \"authors\": [],\n                \"genres\": []\n            },\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Add images for book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/Users/nikolinasikmanovic/Desktop/Screenshot 2024-10-28 at 14.46.34.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/books/4/images",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books",
+								"4",
+								"images"
+							]
+						},
+						"description": "###### This endpoint stores image for a specific book.The request requires specific data fields with validation rules to ensure data integrity.\n\n**Request Body:**\n\n- **image** (file, required): Book's picture, must be an image file with a maximum size of 5 MB.\n    \n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Image uploaded successfully\",\n    \"image_path\": \"book-images/1VbXhn2HnOvVvtWwjZ4g6dbIAhUpOMcpCjiskkGm.png\"\n}\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update cover image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"image_id\":\"3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/books/3/cover-image",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books",
+								"3",
+								"cover-image"
+							]
+						},
+						"description": "###### This endpoint updates the cover image for the specified book by image id.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Cover image saved successfully\",\n    \"cover_image_id\": 3\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Discard book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/books/3/discard",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"books",
+								"3",
+								"discard"
+							]
+						},
+						"description": "###### This endpoint discards the book from the library's inventory. If no copies are left, the book is removed from the active inventory.\n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Book discarded successfully.\"\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Policy",
+			"item": [
+				{
+					"name": "Get policies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/policies",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"policies"
+							]
+						},
+						"description": "###### This endpoint returns policies.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"reservation period\",\n            \"period\": 30\n        },\n        {\n            \"id\": 2,\n            \"name\": \"rental period\",\n            \"period\": 30\n        }\n    ]\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update policy period",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"period\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/policies/1?_method=PUT",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"policies",
+								"1"
+							],
+							"query": [
+								{
+									"key": "_method",
+									"value": "PUT"
+								}
+							]
+						},
+						"description": "###### This endpoint updates details for a specific policy by their ID.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"reservation period\",\n        \"period\": 30\n    }\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rentals",
+			"item": [
+				{
+					"name": "Rent book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_id\": 4,\n    \"student_id\": 5,\n    \"librarian_id\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/rentals/rent",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"rent"
+							]
+						},
+						"description": "###### This endpoint allows a student to rent a book from the library. The request requires specific fields to ensure the correct book is assigned to the correct student and processed by the librarian.\n\n**Request Body:**\n\n- **book_id** (integer, required): The unique identifier of the book to be rented.\n    \n- **student_id** (integer, required): The unique identifier of the student who is renting the book.\n    \n- **librarian_id** (integer, required): The unique identifier of the librarian processing the rental.\n    \n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": 3,\n        \"book_id\": 4,\n        \"student_id\": 5,\n        \"librarian_id\": 14,\n        \"rented_at\": \"2024-10-29T09:17:59.278252Z\"\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Return book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_id\": 6,\n    \"librarian_id\": 5,\n    \"student_id\":5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/rentals/6/return",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"6",
+								"return"
+							]
+						},
+						"description": "###### This endpoint allows for the return of a previously rented book. The request requires identifiers for the book, student, and librarian to ensure accurate processing of the return.\n\n**Request Body:**\n\n- **book_id** (integer, required): The unique identifier of the book being returned.\n    \n- **student_id** (integer, required): The unique identifier of the student returning the book.\n    \n- **librarian_id** (integer, required): The unique identifier of the librarian handling the return.\n    \n\n**Response** **Example**:\n\n``` json\n{\n    \"message\": \"Book returned successfully.\",\n    \"overdue_days\": 0\n}\n\n ```\n\n###### If a return request is made for a book that was not previously rented out, the system will return the following error:\n\n**Response** **Example**:\n\n``` json\n{\n   \"error\": \"This book was not rented out, hence cannot be returned.\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get overdue",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/rentals/overdue",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"overdue"
+							]
+						},
+						"description": "###### This endpoint returns overdue books. It also returns student, librarian, overdue_days and active_days_of_rental.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 20,\n            \"total\": 3\n        },\n        \"data\": [\n            {\n                \"id\": 9,\n                \"book_id\": 4,\n                \"student_id\": 5,\n                \"librarian_id\": 5,\n                \"rented_at\": \"2024-05-29 14:13:51\",\n                \"returned_at\": null,\n                \"book\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                },\n                \"student\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                },\n                \"overdue_days\": 123,\n                \"active_days_of_rental\": 153\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get rented",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/rentals/rented",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"rented"
+							]
+						},
+						"description": "###### This endpoint returns a list of all rented books. It also returns student, librarian and active_days_of_rental.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 20,\n            \"total\": 3\n        },\n        \"data\": [\n            {\n                \"id\": 7,\n                \"book_id\": 4,\n                \"student_id\": 5,\n                \"librarian_id\": 5,\n                \"rented_at\": \"2024-10-29 14:11:07\",\n                \"returned_at\": null,\n                \"book\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                },\n                \"student\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                },\n                \"active_days_of_rental\": 0\n            },\n            {\n                \"id\": 8,\n                \"book_id\": 4,\n                \"student_id\": 5,\n                \"librarian_id\": 5,\n                \"rented_at\": \"2024-10-29 14:12:08\",\n                \"returned_at\": null,\n                \"book\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                },\n                \"student\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                },\n                \"active_days_of_rental\": 0\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get returned",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/rentals/returned",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"returned"
+							]
+						},
+						"description": "###### This endpoint returns returned books. It also returns student and librarian.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"data\": {\n        \"meta\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 20,\n            \"total\": 1\n        },\n        \"data\": [\n            {\n                \"id\": 6,\n                \"book_id\": 4,\n                \"student_id\": 5,\n                \"librarian_id\": 5,\n                \"rented_at\": \"2024-10-29 13:28:18\",\n                \"returned_at\": \"2024-10-29 14:33:49\",\n                \"book\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                },\n                \"student\": {\n                    \"id\": 4,\n                    \"name\": \"Advanced PHP\",\n                    \"description\": \"Learn advanced PHP topics.\",\n                    \"number_of_pages\": 200,\n                    \"number_of_copies\": 1,\n                    \"isbn\": \"9783162914100\",\n                    \"language\": \"French\",\n                    \"binding\": \"Hardcover\",\n                    \"script\": \"Cyrillic\",\n                    \"dimensions\": \"15cm x 21cm\",\n                    \"created_at\": \"2024-10-09T12:23:11.000000Z\",\n                    \"updated_at\": \"2024-10-29T14:33:49.000000Z\"\n                }\n            }\n        ]\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all rentals",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0/api/rentals",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"rentals"
+							]
+						},
+						"description": "###### This endpoint returns a list of rentals within the system.\n\n**Response** **Example**:"
+					},
+					"response": []
+				},
+				{
+					"name": "Get rental summary",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"description": "This API retrives all rentals summary",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://0.0.0.0/api/rentals/summary",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"summary"
+							]
+						},
+						"description": "###### This endpoint returns a summary of the current rental status in the library. It returns a summary of:\n\n###### \\- The number of books that are currently rented but not overdue.  \n\\- The number of books that are overdue based on the rental policy.\n\n**Response** **Example**:\n\n``` json\n{\n    \"status\": \"success\",\n    \"rented_not_overdue\": 2,\n    \"rented_overdue\": 1\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"veronica.nolan@example.org\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0/api/login",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				},
+				"description": "###### This endpoint allows users to log in by providing their email and password. Upon successful authentication, the API returns an access token, which can be used for accessing authenticated routes.\n\n**Example** **Response:**\n\n``` json\n    \"token\": \"4|OTHWKAq9eEXikrRUKTlKcf3fb7SZ05kGiJuh1L7L276d38f8\"\n\n ```\n\n###### If authentication fails (e.g., incorrect credentials), the API will return an error message and a `401 Unauthorized` status."
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0/api/logout",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"path": [
+						"api",
+						"logout"
+					]
+				},
+				"description": "###### This endpoint allows an authenticated user to log out by invalidating their access token. After a successful logout, the user’s token can no longer be used to access authenticated routes.\n\n**Example Response:**\n\n``` json\n{\n    \"message\": \"Logged out successfully\"\n}\n\n ```"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "Token",
+			"value": "8QIVUDUFBK6TRJjBZ88d8RWjx7QO5OPhG90oY0VQ0c937bbe"
+		}
+	]
+}
