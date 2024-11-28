@@ -73,7 +73,7 @@ class RentalController extends Controller
 
         if (in_array($status, ['rented', 'overdue'])) {
             $books->each(function ($rental) {
-                $rental->active_days_of_rental = $this->calculateDaysDifference($rental->rented_at);
+                $rental->active_days_of_rental = Carbon::parse($rental->rented_at)->calculateDaysDifference();
             });
         }
 
@@ -167,24 +167,10 @@ class RentalController extends Controller
         $dueDate = Carbon::parse($rental->rented_at)->addDays($rentalPolicy->period);
 
         if (now()->greaterThan($dueDate)) {
-            return $this->calculateDaysDifference($dueDate);
+            return $dueDate->calculateDaysDifference();
         }
 
         return 0;
-    }
-
-    /**
-     *  Calculates the difference in days between a given start date and the current date.
-     *
-     * @param $startDate
-     * @return float
-     */
-    private function calculateDaysDifference($startDate)
-    {
-        $from_date = Carbon::parse(date('Y-m-d', strtotime($startDate)));
-        $through_date = Carbon::parse(date('Y-m-d', strtotime(now())));
-
-        return $from_date->diffInDays($through_date);
     }
 
     /**
