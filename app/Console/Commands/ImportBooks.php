@@ -86,6 +86,8 @@ class ImportBooks extends Command
             if (!empty($jobs)) {
                 Bus::batch($jobs)
                     ->then(function (Batch $batch) {
+                        event(new \App\Events\BooksFetchedEvent('Books fetched successfully', 1));
+
                         if ($email = optional(Auth::user())->email) {
                             Mail::to($email)->send(new BooksFetchedMail());
                         }
